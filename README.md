@@ -7,7 +7,6 @@ bundle exec buildpack-packager --cached
 # test
 bundle exec buildpack-build
 
-
 # test on cf
 cf delete-buildpack R-buildpack -f
 cf create-buildpack R-buildpack ./R_buildpack-cached-v1.6.47.zip 13 --enable
@@ -18,6 +17,12 @@ https://github.com/alexkago/cf-buildpack-r/tree/master/test
 cf push r-test -b R-buildpack
 
 https://github.com/virtualstaticvoid/heroku-buildpack-r/tree/heroku-16
+
+
+# refer to
+http://engineering.pivotal.io/post/creating-a-custom-buildpack/
+https://docs.cloudfoundry.org/buildpacks/custom.html
+https://github.com/cloudfoundry/buildpack-packager
 
 
 
