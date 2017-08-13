@@ -1,5 +1,5 @@
 ---
-language: ruby
+language: R
 default_versions:
 - name: ruby
   version: 2.4.1
@@ -21,6 +21,9 @@ url_to_dependency_map:
   version: "$1"
 - match: yarn-v(\d+\.\d+\.\d+)
   name: yarn
+  version: "$1"
+- match: R-(\d+\.\d+\.\d+)
+  name: R
   version: "$1"
 dependency_deprecation_dates:
 - match: 4\.\d+\.\d+
@@ -61,15 +64,15 @@ dependencies:
   cf_stacks:
   - cflinuxfs2
 - name: ruby
-  version: 2.4.0
-  md5: e6c8fe1167d47c3ea78b45e260139bc5
-  uri: https://buildpacks.cloudfoundry.org/dependencies/ruby/ruby-2.4.0-linux-x64-e6c8fe11.tgz
-  cf_stacks:
-  - cflinuxfs2
-- name: ruby
   version: 2.4.1
   md5: 9e45185894c63e4be0f45caa2d5546e1
   uri: https://buildpacks.cloudfoundry.org/dependencies/ruby/ruby-2.4.1-linux-x64-9e451858.tgz
+  cf_stacks:
+  - cflinuxfs2
+- name: ruby
+  version: 2.4.0
+  md5: e6c8fe1167d47c3ea78b45e260139bc5
+  uri: https://buildpacks.cloudfoundry.org/dependencies/ruby/ruby-2.4.0-linux-x64-e6c8fe11.tgz
   cf_stacks:
   - cflinuxfs2
 - name: ruby
@@ -150,6 +153,12 @@ dependencies:
   md5: 02a017c606bbf9b9f8382d4e872a14cb
   cf_stacks:
   - cflinuxfs2
+- name: R
+  version: 3.1.0
+  uri: https://s3.amazonaws.com/r-buildpack/R-3.1.0-binaries-20140629-2201.tar.gz
+  md5: 7bcabeef490c60d6032f986d3eb28003
+  cf_stacks:
+  - cflinuxfs2  
 exclude_files:
 - ".bin"
 - ".bundle"
@@ -168,3 +177,5 @@ exclude_files:
 - buildpack-packager/
 - ruby_buildpack-*v*.zip
 - cf_build/
+- tmp/
+- R_buildpack*.zip

@@ -1,3 +1,28 @@
+
+# build
+git submodule update --init
+BUNDLE_GEMFILE=cf.Gemfile bundle
+bundle exec buildpack-packager --cached
+
+# test
+bundle exec buildpack-build
+
+
+# test on cf
+cf delete-buildpack R-buildpack -f
+cf create-buildpack R-buildpack ./R_buildpack-cached-v1.6.47.zip 13 --enable
+cf update-buildpack R-buildpack -p ./R_buildpack-cached-v1.6.47.zip   
+
+# sample app
+https://github.com/alexkago/cf-buildpack-r/tree/master/test
+cf push r-test -b R-buildpack
+
+https://github.com/virtualstaticvoid/heroku-buildpack-r/tree/heroku-16
+
+
+
+
+
 # Cloud Foundry Ruby Buildpack
 [![CF Slack](https://www.google.com/s2/favicons?domain=www.slack.com) Join us on Slack](https://cloudfoundry.slack.com/messages/buildpacks/)
 
