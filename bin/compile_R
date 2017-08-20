@@ -30,6 +30,8 @@ function indent() {
 }
 
 
+
+
 APT_CACHE_DIR="$CACHE_DIR/apt/cache"
 APT_STATE_DIR="$CACHE_DIR/apt/state"
 
@@ -53,23 +55,36 @@ mkdir -p $CHROOT_DIR
 APT_OPTIONS="-o debug::nolocking=true -o dir::cache=$APT_CACHE_DIR -o dir::state=$APT_STATE_DIR"
 
 
+
 topic "Updating apt caches"
 apt-get $APT_OPTIONS update | indent
+
+#setup apt-get repository
+
+topic "Install *.deb from buildpack"
+# from: /tmp/buildpacks/7e3717441352283936abc3b1f6772b1b/dependencies/*.deb
+# to:   /tmp/cache/apt/cache/archives/
+cp -Rv $BUILDPACK_DIR/dependencies/*.deb $APT_CACHE_DIR/archives
+mkdir -p $CHROOT_DIR
+for DEB in $(ls -1 $APT_CACHE_DIR/archives/*.deb); do
+  topic "Installing $(basename $DEB)"
+  dpkg -x $DEB $CHROOT_DIR/
+  rm $DEB
+done
 
 
 topic "Setting up fakechroot"
 apt-get  $APT_OPTIONS -y --force-yes -d install fakeroot | indent
 apt-get  $APT_OPTIONS -y --force-yes -d install fakechroot | indent
 apt-get  $APT_OPTIONS -y --force-yes -d install libc6-dev | indent    # for R package compilation.
-
 for DEB in $(ls -1 $APT_CACHE_DIR/archives/*.deb); do
-  topic "Installing $DEB"
+  topic "Installing $(basename $DEB)"
   dpkg -x $DEB $CHROOT_DIR/
-  rm -rf $DEB
+  rm $DEB
 done
 
 
-topic "setting up fakechroot"
+topic "Setting up fakechroot"
 mkdir -p $CHROOT_DIR/usr
 mkdir -p $CHROOT_DIR/lib
 mkdir -p $CHROOT_DIR/etc/alternatives
@@ -117,7 +132,8 @@ for PACKAGE in $(cat $BUILD_DIR/Aptfile); do
     curl -s -L -z $PACKAGE_FILE -o $PACKAGE_FILE $PACKAGE 2>&1 | indent
   else
     topic "Fetching .debs for $PACKAGE"
-    apt-get $APT_OPTIONS -y --force-yes -d install --reinstall $PACKAGE | indent
+    #apt-get $APT_OPTIONS -y --force-yes -d install --reinstall $PACKAGE | indent
+    apt-get $APT_OPTIONS -y --force-yes -d install $PACKAGE | indent
   fi
 done
 mkdir -p $CHROOT_DIR
@@ -128,6 +144,18 @@ done
 
 topic "Install shiny packages into R"
 
+mkdir -p cd $CHROOT_DIR/shiny_packages
+cd $CHROOT_DIR/shiny_packages
+$BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR Rcpp 0.12.12 Rcpp_0.12.12.tar.gz
+$BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR httpvu 1.3.5 httpuv_1.3.5.tar.gz
+$BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR mime 0.5 mime_0.5.tar.gz
+$BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR jsonlite 1.5 jsonlite_1.5.tar.gz
+$BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR xtable 1.8 xtable_1.8-2.tar.gz
+$BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR digest 0.6.12 digest_0.6.12.tar.gz
+$BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR htmltools 0.3.6 htmltools_0.3.6.tar.gz
+$BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR R6 2.2.2 R6_2.2.2.tar.gz
+$BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR sourcetools 0.1.6 sourcetools_0.1.6.tar.gz
+$BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR shiny 1.0.4 shiny_1.0.4.tar.gz
 cat <<EOF >$CHROOT_DIR/install_shiny_to_R_for_PCF_staging.sh
 #!/bin/bash
 source /root/.bashrc
@@ -142,7 +170,18 @@ rm ldpaths
 ln -s /etc/R/ldpaths ldpaths
 
 export EDITOR=vim
-R -e "install.packages('shiny', repos='http://cran.us.r-project.org')"
+R CMD INSTALL --build /shiny_packages/Rcpp_0.12.12.tar.gz
+R CMD INSTALL --build /shiny_packages/httpuv_1.3.5.tar.gz
+R CMD INSTALL --build /shiny_packages/mime_0.5.tar.gz
+R CMD INSTALL --build /shiny_packages/jsonlite_1.5.tar.gz
+R CMD INSTALL --build /shiny_packages/xtable_1.8-2.tar.gz
+R CMD INSTALL --build /shiny_packages/digest_0.6.12.tar.gz
+R CMD INSTALL --build /shiny_packages/htmltools_0.3.6.tar.gz
+R CMD INSTALL --build /shiny_packages/R6_2.2.2.tar.gz
+R CMD INSTALL --build /shiny_packages/sourcetools_0.1.6.tar.gz
+R CMD INSTALL --build /shiny_packages/shiny_1.0.4.tar.gz
+
+# R -e "install.packages('shiny', repos='http://cran.us.r-project.org')"
 
 exit
 
