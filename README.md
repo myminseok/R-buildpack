@@ -1,4 +1,7 @@
 
+
+
+
 # build buildpack
 ```
 git submodule update --init
@@ -10,13 +13,16 @@ bundle exec buildpack-packager --cached
 bundle exec buildpack-build
 ```
 
-# upload on cf
+# upload on cf and test
 ```
 cf delete-buildpack R-buildpack -f
 cf create-buildpack R-buildpack ./R_buildpack-cached-v1.6.47.zip 13 --enable
 cf update-buildpack R-buildpack -p ./R_buildpack-cached-v1.6.47.zip   
-```
 
+cd test
+cf push
+
+```
 # sample app
 https://github.com/alexkago/cf-buildpack-r/tree/master/test
 cf push r-test -b R-buildpack
