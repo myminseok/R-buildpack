@@ -19,7 +19,6 @@ echo "BUILDPACK_DIR:$BUILDPACK_DIR"
 $BUILDPACK_DIR/bin/supply "$BUILD_DIR" "$CACHE_DIR" "$DEPS_DIR" 0
 $BUILDPACK_DIR/bin/finalize "$BUILD_DIR" "$CACHE_DIR" "$DEPS_DIR" 0
 
-
 echo "compile R"
 $BUILDPACK_DIR/bin/compile_R "$BUILD_DIR" "$CACHE_DIR"
 

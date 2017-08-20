@@ -152,13 +152,7 @@ dependencies:
   uri: https://buildpacks.cloudfoundry.org/dependencies/node/node-6.11.2-linux-x64-02a017c6.tgz
   md5: 02a017c606bbf9b9f8382d4e872a14cb
   cf_stacks:
-  - cflinuxfs2
-- name: R
-  version: 3.1.0
-  uri: https://s3.amazonaws.com/r-buildpack/R-3.1.0-binaries-20140629-2201.tar.gz
-  md5: 7bcabeef490c60d6032f986d3eb28003
-  cf_stacks:
-  - cflinuxfs2  
+  - cflinuxfs2 
 exclude_files:
 - ".bin"
 - ".bundle"

@@ -1,0 +1,13 @@
+---
+applications:
+- name: r-test
+#  buildpack: https://github.com/myminseok/ruby-buildpack.git#test
+  buildpack: R-buildpack
+  command: echo "BBBB" && nc -l -p 8081
+  memory: 2GB
+  disk_quota: 1GB
+  no-route: true
+  health-check-type: process
+  env:
+    JBP_LOG_LEVEL: DEBUG
+
