@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+
+require 'open3'
+
+# sync output
+#$stdout.sync = true
+
+buildpack_dir = ARGV[0]
+name = ARGV[1]
+version = ARGV[2]
+output_filename = ARGV[3]
+stdout, stderr, status = Open3.capture3("#{buildpack_dir}/compile-extensions/bin/download_dependency_by_name", "#{name}", "#{version}", "#{output_filename}") 
+if status.exitstatus != 0
+  puts "download_dependency_by_name script failed: #{stdout} \n====\n #{stderr}"
+  exit 1
+end
