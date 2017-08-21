@@ -3,12 +3,9 @@ applications:
 - name: r-test
 #  buildpack: https://github.com/myminseok/ruby-buildpack.git#test
   buildpack: R-buildpack
-  command: echo "BBBB" && nc -l -p 8080
-#  command:  source /home/vcap/app/.profile.d/000_apt.sh && fakechroot fakeroot chroot /home/vcap/app R -e "shiny::runApp('/shiny/001-hello', port=$PORT, host='0.0.0.0')"
+#  command: echo "BBBB" && nc -l -p 8080
+  command:  source /home/vcap/app/.profile.d/000_apt.sh ;  fakechroot fakeroot chroot /home/vcap/app sh /run.sh
   memory: 2GB
   disk_quota: 1GB
-  no-route: true
   health-check-type: process
-  env:
-    JBP_LOG_LEVEL: DEBUG
 

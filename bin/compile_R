@@ -72,7 +72,7 @@ topic "Install provided apts from buildpack (fakeroot, fakechroot, libc6-dev, r-
 #topic "[debug] << 1 $APT_CACHE_DIR/archives "
 
 for DEB in $(ls -1 $BUILDPACK_DIR/dependencies/*.deb); do
-    topic "Installing $DEB"
+    topic "Installing deb from buildpack $DEB"
     dpkg -x $DEB $CHROOT_DIR/
 done
 
@@ -131,7 +131,7 @@ topic "Install apt packages from Aptfile"
 #find $APT_CACHE_DIR/archives
 #topic "[debug] << 2 $APT_CACHE_DIR/archives "
 
-if [[ -s $BUILD_DIR/Aptfile ]]; then
+if [ ! -s $BUILD_DIR/Aptfile ]; then
    topic "Aptfile is empty, skip"
 else
 
@@ -228,7 +228,7 @@ topic "Writing profile script"
 mkdir -p $CHROOT_DIR/.profile.d
 cat <<EOF >$CHROOT_DIR/.profile.d/000_apt.sh
 #!/bin/bash
-export CHROOT_DIR="\$HOME/app"
+export CHROOT_DIR="/home/vcap/app"
 export PATH="\$CHROOT_DIR/usr/bin:\$CHROOT_DIR/usr/sbin:/sbin:/usr/sbin:\$PATH"
 export LD_LIBRARY_PATH="\$CHROOT_DIR/usr/lib/x86_64-linux-gnu:\$CHROOT_DIR/usr/lib/i386-linux-gnu:\$CHROOT_DIR/usr/lib:\$LD_LIBRARY_PATH"
 export LD_LIBRARY_PATH="\$CHROOT_DIR/usr/lib/x86_64-linux-gnu/fakechroot:\$LD_LIBRARY_PATH"
@@ -246,7 +246,7 @@ chmod 777 $CHROOT_DIR/.profile.d/000_apt.sh
 
 
 # TODO: create wrapper.
-cat <<EOF >$CHROOT_DIR/R.sh
+cat <<EOF >$CHROOT_DIR/R_setup.sh
 #!/bin/bash
 source /root/.bashrc
 
@@ -258,11 +258,12 @@ rm Makeconf
 ln -s /etc/R/Makeconf Makeconf
 rm ldpaths
 ln -s /etc/R/ldpaths ldpaths
-
+touch /tmp/app
+chmod 777 /tmp/app
 export EDITOR=vim
-R
+
 EOF
-chmod 777 $CHROOT_DIR/R.sh
+chmod 777 $CHROOT_DIR/R_setup.sh
 
 
 
