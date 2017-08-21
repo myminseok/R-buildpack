@@ -52,37 +52,40 @@ mkdir -p "$APT_CACHE_DIR/archives/partial"
 mkdir -p "$APT_STATE_DIR/lists/partial"
 mkdir -p $CHROOT_DIR
 
-APT_OPTIONS="-o debug::nolocking=true -o dir::cache=$APT_CACHE_DIR -o dir::state=$APT_STATE_DIR"
-
-
 
 topic "Updating apt caches"
+APT_OPTIONS="-o debug::nolocking=true -o dir::cache=$APT_CACHE_DIR -o dir::state=$APT_STATE_DIR"
 apt-get $APT_OPTIONS update | indent
+apt-get $APT_OPTIONS clean | indent
 
-#setup apt-get repository
+topic "Install provided apts from buildpack (fakeroot, fakechroot, libc6-dev, r-base)"
+#if ls -1 $APT_CACHE_DIR/archives/*.deb 1> /dev/null 2>1&; then
+  ## BUILDPACK_DIR /tmp/buildpacks/7e3717441352283936abc3b1f6772b1b/dependencies/*.deb
+  ## APT_CACHE_DIR /tmp/cache/apt/cache/archives/
+  #cp -Rv $BUILDPACK_DIR/dependencies/*.deb $APT_CACHE_DIR/archives 
+#fi
+#topic "[debug] >> 1 $BUILDPACK_DIR/dependencies"
+#find $BUILDPACK_DIR/dependencies
+#topic "[debug] << 1 $BUILDPACK_DIR/dependencies"
+#topic "[debug] >> 1 $APT_CACHE_DIR/archives "
+#find $APT_CACHE_DIR/archives
+#topic "[debug] << 1 $APT_CACHE_DIR/archives "
 
-topic "Install *.deb from buildpack"
-# from: /tmp/buildpacks/7e3717441352283936abc3b1f6772b1b/dependencies/*.deb
-# to:   /tmp/cache/apt/cache/archives/
-cp -Rv $BUILDPACK_DIR/dependencies/*.deb $APT_CACHE_DIR/archives
-mkdir -p $CHROOT_DIR
-for DEB in $(ls -1 $APT_CACHE_DIR/archives/*.deb); do
-  topic "Installing $(basename $DEB)"
-  dpkg -x $DEB $CHROOT_DIR/
-  rm $DEB
+for DEB in $(ls -1 $BUILDPACK_DIR/dependencies/*.deb); do
+    topic "Installing $DEB"
+    dpkg -x $DEB $CHROOT_DIR/
 done
 
-
-topic "Setting up fakechroot"
-apt-get  $APT_OPTIONS -y --force-yes -d install fakeroot | indent
-apt-get  $APT_OPTIONS -y --force-yes -d install fakechroot | indent
-apt-get  $APT_OPTIONS -y --force-yes -d install libc6-dev | indent    # for R package compilation.
-for DEB in $(ls -1 $APT_CACHE_DIR/archives/*.deb); do
-  topic "Installing $(basename $DEB)"
-  dpkg -x $DEB $CHROOT_DIR/
-  rm $DEB
-done
-
+## will be installed from buildpack
+#topic "Setting up fakechroot"
+#apt-get  $APT_OPTIONS -y --force-yes -d install fakeroot | indent
+#apt-get  $APT_OPTIONS -y --force-yes -d install fakechroot | indent
+#apt-get  $APT_OPTIONS -y --force-yes -d install libc6-dev | indent    # for R package compilation.
+#apt-get  $APT_OPTIONS -y --force-yes -d install r-base | indent
+#for DEB in $(ls -1 $APT_CACHE_DIR/archives/*.deb); do
+#  topic "Installing $(basename $DEB)"
+#  dpkg -x $DEB $CHROOT_DIR/
+#done
 
 topic "Setting up fakechroot"
 mkdir -p $CHROOT_DIR/usr
@@ -123,6 +126,15 @@ mkdir -p $CHROOT_DIR/root && cp /home/vcap/.bashrc $CHROOT_DIR/root/.bashrc
 
 
 topic "Install apt packages from Aptfile"
+
+#topic "[debug] >> 2 $APT_CACHE_DIR/archives "
+#find $APT_CACHE_DIR/archives
+#topic "[debug] << 2 $APT_CACHE_DIR/archives "
+
+if [[ -s $BUILD_DIR/Aptfile ]]; then
+   topic "Aptfile is empty, skip"
+else
+
 for PACKAGE in $(cat $BUILD_DIR/Aptfile); do
   if [[ $PACKAGE == *deb ]]; then
     PACKAGE_NAME=$(basename $PACKAGE .deb)
@@ -132,18 +144,32 @@ for PACKAGE in $(cat $BUILD_DIR/Aptfile); do
     curl -s -L -z $PACKAGE_FILE -o $PACKAGE_FILE $PACKAGE 2>&1 | indent
   else
     topic "Fetching .debs for $PACKAGE"
-    #apt-get $APT_OPTIONS -y --force-yes -d install --reinstall $PACKAGE | indent
-    apt-get $APT_OPTIONS -y --force-yes -d install $PACKAGE | indent
+    apt-get $APT_OPTIONS -y --force-yes -d install --reinstall $PACKAGE | indent
   fi
 done
+
+#topic "[debug] >> 3 $APT_CACHE_DIR/archives "
+#find $APT_CACHE_DIR/archives
+#topic "[debug] << 3 $APT_CACHE_DIR/archives "
 mkdir -p $CHROOT_DIR
 for DEB in $(ls -1 $APT_CACHE_DIR/archives/*.deb); do
-  topic "Installing $(basename $DEB)"
+  topic "Installing from Aptfile $(basename $DEB)"
   dpkg -x $DEB $CHROOT_DIR/
 done
 
-topic "Install shiny packages into R"
+fi
 
+#**************************************************************************************************
+## To archive apt-get deb files for buildpack only.
+## *.deb will be packaged with droplet in $CHROOT_DIR/tmp-apt-archives folder
+## and download using 'cf download-droplet <app-name> <local_file_path>'
+## $CHROOT_DIR/tmp-apt-archives: folder to download *.deb  which can be use to make buildpack later.
+## comment out following line after use.
+#mkdir -p $CHROOT_DIR/tmp-apt-archived && cp -r $APT_CACHE_DIR/archives  $CHROOT_DIR/tmp-apt-archives
+#**************************************************************************************************
+
+
+topic "Install shiny packages into R"
 mkdir -p cd $CHROOT_DIR/shiny_packages
 cd $CHROOT_DIR/shiny_packages
 $BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR Rcpp 0.12.12 Rcpp_0.12.12.tar.gz
@@ -182,7 +208,6 @@ R CMD INSTALL --build /shiny_packages/sourcetools_0.1.6.tar.gz
 R CMD INSTALL --build /shiny_packages/shiny_1.0.4.tar.gz
 
 # R -e "install.packages('shiny', repos='http://cran.us.r-project.org')"
-
 exit
 
 EOF
@@ -199,9 +224,7 @@ EOF
 chmod 777 $CHROOT_DIR/fakeroot.sh
 
 
-
 topic "Writing profile script"
-
 mkdir -p $CHROOT_DIR/.profile.d
 cat <<EOF >$CHROOT_DIR/.profile.d/000_apt.sh
 #!/bin/bash
@@ -223,7 +246,6 @@ chmod 777 $CHROOT_DIR/.profile.d/000_apt.sh
 
 
 # TODO: create wrapper.
-
 cat <<EOF >$CHROOT_DIR/R.sh
 #!/bin/bash
 source /root/.bashrc
