@@ -1,62 +1,57 @@
 library(shiny)
 
-# Define UI for dataset viewer app ----
+# Define UI for app that draws a histogram ----
 ui <- fluidPage(
 
   # App title ----
-  titlePanel("Shiny Text"),
+  titlePanel("Hello Shiny!"),
 
-  # Sidebar layout with a input and output definitions ----
+  # Sidebar layout with input and output definitions ----
   sidebarLayout(
 
     # Sidebar panel for inputs ----
     sidebarPanel(
 
-      # Input: Selector for choosing dataset ----
-      selectInput(inputId = "dataset",
-                  label = "Choose a dataset:",
-                  choices = c("rock", "pressure", "cars")),
+      # Input: Slider for the number of bins ----
+      sliderInput(inputId = "bins",
+                  label = "Number of bins:",
+                  min = 1,
+                  max = 50,
+                  value = 30)
 
-      # Input: Numeric entry for number of obs to view ----
-      numericInput(inputId = "obs",
-                   label = "Number of observations to view:",
-                   value = 10)
     ),
 
     # Main panel for displaying outputs ----
     mainPanel(
 
-      # Output: Verbatim text for data summary ----
-      verbatimTextOutput("summary"),
-
-      # Output: HTML table with requested number of observations ----
-      tableOutput("view")
+      # Output: Histogram ----
+      plotOutput(outputId = "distPlot")
 
     )
   )
 )
 
-# Define server logic to summarize and view selected dataset ----
+# Define server logic required to draw a histogram ----
 server <- function(input, output) {
 
-  # Return the requested dataset ----
-  datasetInput <- reactive({
-    switch(input$dataset,
-           "rock" = rock,
-           "pressure" = pressure,
-           "cars" = cars)
-  })
+  # Histogram of the Old Faithful Geyser Data ----
+  # with requested number of bins
+  # This expression that generates a histogram is wrapped in a call
+  # to renderPlot to indicate that:
+  #
+  # 1. It is "reactive" and therefore should be automatically
+  #    re-executed when inputs (input$bins) change
+  # 2. Its output type is a plot
+  output$distPlot <- renderPlot({
 
-  # Generate a summary of the dataset ----
-  output$summary <- renderPrint({
-    dataset <- datasetInput()
-    summary(dataset)
-  })
+    x    <- faithful$waiting
+    bins <- seq(min(x), max(x), length.out = input$bins + 1)
 
-  # Show the first "n" observations ----
-  output$view <- renderTable({
-    head(datasetInput(), n = input$obs)
-  })
+    hist(x, breaks = bins, col = "#75AADB", border = "white",
+         xlab = "Waiting time to next eruption (in mins)",
+         main = "Histogram of waiting times")
+
+    })
 
 }
 

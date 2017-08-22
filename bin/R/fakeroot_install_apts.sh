@@ -12,5 +12,5 @@ for DEB in $(ls -1 $APT_DIR/*.deb); do
     echo "[fakeroot] Installing apt $DEB"
     dpkg -x $DEB /
 done
-## exit fakeroot
+## to exit from fakechroot
 exit

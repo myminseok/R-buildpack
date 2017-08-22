@@ -1,9 +1,6 @@
 #!/bin/bash
 set -euo pipefail
 
-
-pwd
-
 BUILD_DIR=$1
 CACHE_DIR=$2
 
@@ -13,12 +10,11 @@ export DEPS_DIR="$BUILD_DIR/.cloudfoundry"
 mkdir -p "$DEPS_DIR/0"
 mkdir -p "$BUILD_DIR/.profile.d"
 echo "export DEPS_DIR=\$HOME/.cloudfoundry" > "$BUILD_DIR/.profile.d/0000_set-deps-dir.sh"
-# BUILDPACK_DIR_R:/tmp/buildpacks/832df07f22f020bc41c8d1b6f74fb759
 echo "BUILDPACK_DIR:$BUILDPACK_DIR" 
 
 $BUILDPACK_DIR/bin/supply "$BUILD_DIR" "$CACHE_DIR" "$DEPS_DIR" 0
 $BUILDPACK_DIR/bin/finalize "$BUILD_DIR" "$CACHE_DIR" "$DEPS_DIR" 0
 
 echo "compile R"
-$BUILDPACK_DIR/bin/compile_R "$BUILD_DIR" "$CACHE_DIR"
+$BUILDPACK_DIR/bin/R/compile_R "$BUILD_DIR" "$CACHE_DIR"
 

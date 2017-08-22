@@ -29,17 +29,16 @@ function indent() {
   esac
 }
 
-
-
-
+### BUILD_DIR     /tmp/app
+### BUILDPACK_DIR /tmp/buildpacks/7e3717441352283936abc3b1f6772b1b
+###               /tmp/buildpacks/7e3717441352283936abc3b1f6772b1b/dependencies/*.deb
+### CACHE_DIR     /tmp/cache
+### APT_CACHE_DIR /tmp/cache/apt/cache/archives/
 APT_CACHE_DIR="$CACHE_DIR/apt/cache"
 APT_STATE_DIR="$CACHE_DIR/apt/state"
-
-#/tmp/app/.apt
-#CHROOT_DIR="$BUILD_DIR/.apt"
-#CHROOT_DIR="$BUILD_DIR"
 CHROOT_DIR="/home/vcap/app"
 
+# env for staging.
 export PATH="$CHROOT_DIR/usr/bin:$CHROOT_DIR/usr/sbin:$CHROOT_DIR/usr/lib/rstudio-server:/sbin:/usr/sbin:$PATH"
 export LD_LIBRARY_PATH="$CHROOT_DIR/lib/x86_64-linux-gnu/:$CHROOT_DIR/usr/lib/x86_64-linux-gnu:$CHROOT_DIR/usr/lib/i386-linux-gnu:$CHROOT_DIR/usr/lib:$LD_LIBRARY_PATH"
 export LD_LIBRARY_PATH="$CHROOT_DIR/usr/lib/x86_64-linux-gnu/fakechroot:$LD_LIBRARY_PATH"
@@ -49,19 +48,23 @@ export CPATH="$INCLUDE_PATH"
 export CPPPATH="$INCLUDE_PATH"
 export PKG_CONFIG_PATH="$CHROOT_DIR/usr/lib/x86_64-linux-gnu/pkgconfig:$CHROOT_DIR/usr/lib/i386-linux-gnu/pkgconfig:$CHROOT_DIR/usr/lib/pkgconfig:$PKG_CONFIG_PATH"
 
-mkdir -p "$APT_CACHE_DIR/archives/partial"
-mkdir -p "$APT_STATE_DIR/lists/partial"
-mkdir -p $CHROOT_DIR
-
 APT_OPTIONS="-o debug::nolocking=true -o dir::cache=$APT_CACHE_DIR -o dir::state=$APT_STATE_DIR"
 
-
-#topic "Updating apt caches"
-#apt-get $APT_OPTIONS update | indent
-#apt-get $APT_OPTIONS clean | indent
-
-
 topic "Setting up fakechroot"
+mkdir -p $CHROOT_DIR/.profile.d
+mkdir -p "$APT_CACHE_DIR/archives/partial"
+mkdir -p "$APT_STATE_DIR/lists/partial"
+
+cp $BUILDPACK_DIR/bin/R/fakeroot_install_apts.sh $CHROOT_DIR/fakeroot_install_apts.sh
+cp $BUILDPACK_DIR/bin/R/fakeroot_print_broken_link.sh $CHROOT_DIR/fakeroot_print_broken_link.sh
+cp $BUILDPACK_DIR/bin/R/fakeroot_fix_symlink.sh $CHROOT_DIR/fakeroot_fix_symlink.sh
+cp $BUILDPACK_DIR/bin/R/fakeroot_install_shiny_to_R.sh $CHROOT_DIR/fakeroot_install_shiny_to_R.sh
+cp $BUILDPACK_DIR/bin/R/fakeroot_install_RStudio.sh $CHROOT_DIR/fakeroot_install_RStudio.sh
+cp $BUILDPACK_DIR/bin/R/r_environment.sh $CHROOT_DIR/.profile.d/r_environment.sh 
+cp $BUILDPACK_DIR/bin/R/fakeroot.sh $CHROOT_DIR/fakeroot.sh 
+
+chmod 777 $CHROOT_DIR/*.sh
+
 mkdir -p $CHROOT_DIR/usr
 mkdir -p $CHROOT_DIR/lib
 mkdir -p $CHROOT_DIR/etc/alternatives
@@ -112,42 +115,27 @@ cp /etc/ld.so.cache $CHROOT_DIR/etc/ld.so.cache
 
 
 
-topic "Install provided apts from buildpack (fakeroot, fakechroot, libc6-dev, r-base)"
+topic "Installing fakechroot apts from buildpack "
+$BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR libfakechroot_2.17.2-1_amd64.deb 1 libfakechroot_2.17.2-1_amd64.deb
+$BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR fakechroot_2.17.2-1_all.deb 1 fakechroot_2.17.2-1_all.deb
+$BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR libc6-dev_2.19-0ubuntu6.13_amd64.deb 1 libc6-dev_2.19-0ubuntu6.13_amd64.deb
+dpkg -x ./libfakechroot_2.17.2-1_amd64.deb $CHROOT_DIR/
+dpkg -x ./fakechroot_2.17.2-1_all.deb $CHROOT_DIR/
+dpkg -x ./libc6-dev_2.19-0ubuntu6.13_amd64.deb $CHROOT_DIR/
 
-#if ls -1 $APT_CACHE_DIR/archives/*.deb 1> /dev/null 2>1&; then
-  ## BUILDPACK_DIR /tmp/buildpacks/7e3717441352283936abc3b1f6772b1b/dependencies/*.deb
-  ## APT_CACHE_DIR /tmp/cache/apt/cache/archives/
-  #cp -Rv $BUILDPACK_DIR/dependencies/*.deb $APT_CACHE_DIR/archives 
-#fi
-#topic "[debug] >> 1 $BUILDPACK_DIR/dependencies"
-#find $BUILDPACK_DIR/dependencies
-#topic "[debug] << 1 $BUILDPACK_DIR/dependencies"
-#topic "[debug] >> 1 $APT_CACHE_DIR/archives "
-#find $APT_CACHE_DIR/archives
-#topic "[debug] << 1 $APT_CACHE_DIR/archives "
 
-#for DEB in $(ls -1 $BUILDPACK_DIR/dependencies/fake*.deb); do
-#    topic "Installing deb from buildpack $DEB"
-#    dpkg -x $DEB $CHROOT_DIR/
-#done
-dpkg -x $BUILDPACK_DIR/dependencies/file____Users_kimm5__dev_ruby-buildpack_apt-archives_libfakechroot_2.17.2-1_amd64.deb $CHROOT_DIR/
-dpkg -x $BUILDPACK_DIR/dependencies/file____Users_kimm5__dev_ruby-buildpack_apt-archives_fakechroot_2.17.2-1_all.deb $CHROOT_DIR/
-dpkg -x $BUILDPACK_DIR/dependencies/file____Users_kimm5__dev_ruby-buildpack_apt-archives_libc6-dev_2.19-0ubuntu6.13_amd64.deb $CHROOT_DIR/
 
-cp $BUILDPACK_DIR/bin/fakeroot_install_apts.sh $CHROOT_DIR/fakeroot_install_apts.sh
-
-topic "[fakeroot] Updating apt caches"
+topic "Checking dpkg environment in fakechroot"
 #fakechroot fakeroot chroot $CHROOT_DIR apt-get update
+# check dpkg environment.
 fakechroot fakeroot chroot $CHROOT_DIR dpkg --configure -a
 
-topic "Install apts from buildpack to fakeroot"
+topic "Installing apts from buildpack into fakechroot"
 mkdir -p cd $CHROOT_DIR/apts_from_buildpack && cp $BUILDPACK_DIR/dependencies/*.deb $CHROOT_DIR/apts_from_buildpack
 fakechroot fakeroot chroot $CHROOT_DIR /fakeroot_install_apts.sh /apts_from_buildpack
+rm -rf $CHROOT_DIR/apts_from_buildpack
 
-topic "Install apts from Aptfile"
-#topic "[debug] >> 2 $APT_CACHE_DIR/archives "
-#find $APT_CACHE_DIR/archives
-#topic "[debug] << 2 $APT_CACHE_DIR/archives "
+topic "Installing apts from Aptfile into fakechroot"
 if [ -s $BUILD_DIR/Aptfile ]; then
 for PACKAGE in $(cat $BUILD_DIR/Aptfile); do
   if [[ $PACKAGE == *deb ]]; then
@@ -164,11 +152,6 @@ done
 #topic "[debug] >> 3 $APT_CACHE_DIR/archives "
 #find $APT_CACHE_DIR/archives
 #topic "[debug] << 3 $APT_CACHE_DIR/archives "
-#mkdir -p $CHROOT_DIR
-#for DEB in $(ls -1 $APT_CACHE_DIR/archives/*.deb); do
-#  topic "Installing from Aptfile $(basename $DEB)"
-#  dpkg -x $DEB $CHROOT_DIR/
-#done
 #**************************************************************************************************
 ## archived apt files can be packaged into buildpack later.
 ## download using 'cf download-droplet <app-name> <local_file_path>'
@@ -176,20 +159,16 @@ done
 #**************************************************************************************************
 mkdir -p cd $CHROOT_DIR/apts_from_aptfile && cp -R $APT_CACHE_DIR/archives/*.deb $CHROOT_DIR/apts_from_aptfile
 fakechroot fakeroot chroot $CHROOT_DIR /fakeroot_install_apts.sh /apts_from_aptfile
-
 fi
 
-topic "[1] Fix broken symbolic link in fakeroot for container env(not staging env)"
-cp $BUILDPACK_DIR/bin/fakeroot_print_broken_link.sh $CHROOT_DIR/fakeroot_print_broken_link.sh && chmod 777 $CHROOT_DIR/fakeroot_print_broken_link.sh
-cp $BUILDPACK_DIR/bin/fakeroot_fix_symlink.sh $CHROOT_DIR/fakeroot_fix_symlink.sh
-
+topic "Fixing broken symbolic link in fakeroot[1]"
 fakechroot fakeroot chroot $CHROOT_DIR  /fakeroot_print_broken_link.sh
 sh $CHROOT_DIR/fakeroot_fix_symlink.sh
 fakechroot fakeroot chroot $CHROOT_DIR  /fakeroot_print_broken_link.sh
 
 
 topic "Install shiny packages into R"
-mkdir -p cd $CHROOT_DIR/shiny_packages
+mkdir -p $CHROOT_DIR/shiny_packages
 cd $CHROOT_DIR/shiny_packages
 $BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR Rcpp 0.12.12 Rcpp_0.12.12.tar.gz
 $BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR httpvu 1.3.5 httpuv_1.3.5.tar.gz
@@ -201,54 +180,45 @@ $BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR htmltools 0.3.6 htmltools_
 $BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR R6 2.2.2 R6_2.2.2.tar.gz
 $BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR sourcetools 0.1.6 sourcetools_0.1.6.tar.gz
 $BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR shiny 1.0.4 shiny_1.0.4.tar.gz
-
-cp $BUILDPACK_DIR/bin/fakeroot_install_shiny_to_R.sh $CHROOT_DIR/fakeroot_install_shiny_to_R.sh
 fakechroot fakeroot chroot $CHROOT_DIR sh /fakeroot_install_shiny_to_R.sh
+rm -rf $CHROOT_DIR/shiny_packages
+cd $CHROOT_DIR
+env
 
-
-topic "[2] Fix broken symbolic link in fakeroot for container env(not staging env) 2 "
+topic "Fixing broken symbolic link in fakeroot[2]"
 fakechroot fakeroot chroot $CHROOT_DIR  /fakeroot_print_broken_link.sh
 sh $CHROOT_DIR/fakeroot_fix_symlink.sh
 fakechroot fakeroot chroot $CHROOT_DIR  /fakeroot_print_broken_link.sh
 
 
+rm -rf $CHROOT_DIR/etc/hosts && cp /etc/hosts $CHROOT_DIR/etc/hosts
+rm -rf $CHROOT_DIR/etc/ld.so.conf && cp /etc/ld.so.conf $CHROOT_DIR/etc/ld.so.conf
+rm -rf $CHROOT_DIR/etc/ld.so.cache && cp /etc/ld.so.conf $CHROOT_DIR/etc/ld.so.cache
+
+
+
+topic "Install RStudio-server"
+mkdir -p $CHROOT_DIR/rstudio_packages
+cd $CHROOT_DIR/rstudio_packages
+$BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR libapparmor1 2.8.95 libapparmor1_2.8.95~2430-0ubuntu5_amd64.deb
+$BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR rstudio-server 1.0.153 rstudio-server-1.0.153-amd64.deb
+
+#fakechroot fakeroot chroot $CHROOT_DIR  /fakeroot_install_RStudio.sh
+#rm -rf $CHROOT_DIR/rstudio_packages
+
 topic "Writing profile script"
-mkdir -p $CHROOT_DIR/.profile.d
-cp $BUILDPACK_DIR/bin/000_apt.sh $CHROOT_DIR/.profile.d/000_apt.sh
-
 # TODO: create wrapper.
-cat <<EOF >$CHROOT_DIR/R_setup.sh
-#!/bin/bash
-source /root/.bashrc
-
-# to fix R for runtime env
-#cd /usr/lib/R/etc
-#rm Renviron
-#cp Renviron.orig Renviron
-#rm Makeconf
-#ln -s /etc/R/Makeconf Makeconf
-#rm ldpaths
-#ln -s /etc/R/ldpaths ldpaths
-touch /tmp/app
-chmod 777 /tmp/app
-export EDITOR=vim
-EOF
-chmod 777 $CHROOT_DIR/R_setup.sh
-
-
-
-cat <<EOF >$CHROOT_DIR/fakeroot.sh
-#!/bin/bash
-source $HOME/app/.profile.d/000_apt.sh
-fakechroot fakeroot chroot $HOME/app/ /bin/bash
-EOF
-chmod 777 $CHROOT_DIR/fakeroot.sh
+#cat <<EOF >$CHROOT_DIR/R_setup.sh
+##!/bin/bash
+#source /root/.bashrc
+#touch /tmp/app
+#chmod 777 /tmp/app
+#export EDITOR=vim
+#EOF
 
 
 #give environment to later buildpacks
 #export | grep -E -e ' (PATH|LD_LIBRARY_PATH|LIBRARY_PATH|INCLUDE_PATH|CPATH|CPPPATH|PKG_CONFIG_PATH)='  > "$LP_DIR/export"
-
-
 
 
 topic "moving  $CHROOT_DIR/*  => $BUILD_DIR "

@@ -1,5 +1,4 @@
 #!/bin/bash
-
 ## should run outside of fakeroot. (not in fakechroot env)
 
 rm_symlink() {
