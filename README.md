@@ -35,6 +35,8 @@ https://github.com/rstudio/shiny-examples
 
 # Building the Buildpack
 
+
+
 1. Make sure you have fetched submodules
 
   ```bash
@@ -53,18 +55,39 @@ https://github.com/rstudio/shiny-examples
   bundle exec buildpack-packager --cached
   BUNDLE_GEMFILE=cf.Gemfile bundle exec buildpack-packager [ --uncached | --cached ]
   ```
+
 1. test buildpack
+
 ```
 bundle exec buildpack-build
 ```
+
 1. Use in Cloud Foundry
+
+you may use [pcfdev](https://network.pivotal.io/products/pcfdev) or [Pivotal Cloud Foundry](https://network.pivotal.io/). you need admin priviledge to publish on cloudfoundfy.
 ```
 cf delete-buildpack R-buildpack -f
 cf create-buildpack R-buildpack ./R_buildpack-cached-v1.6.47.zip 13 --enable
 cf update-buildpack R-buildpack -p ./R_buildpack-cached-v1.6.47.zip   
 ```
 
-# refer to
+
+
+or
+
+edit 'build_buildpack.sh'  and login on cloud foundry as 'admin'
+and run the script. it will deploy buildpack to cloud foundry.
+
+
+# Caching apt, deb, zip file to buildpack.
+
+1. download to './apt-archives' directory
+1. put metainfo to './mainfest.yml' file.
+for editing manifest.yml, refere to https://docs.cloudfoundry.org/buildpacks/custom.html
+you may use script(./bin/R/gen_apt_archives_manifest.sh) to generate meta yml for lots of debs.
+
+
+# Refer to 
 http://engineering.pivotal.io/post/creating-a-custom-buildpack/
 https://docs.cloudfoundry.org/buildpacks/custom.html/
 https://github.com/cloudfoundry/buildpack-packager/
@@ -72,5 +95,6 @@ Official buildpack documentation can be found at [ruby buildpack docs](http://do
 
 # TODO
 install R studio
+
 minimize buildpack size.
 
