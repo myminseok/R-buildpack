@@ -6,6 +6,6 @@ applications:
 #  command: echo "BBBB" && nc -l -p 8080
   command:  source /home/vcap/app/.profile.d/000_apt.sh ;  fakechroot fakeroot chroot /home/vcap/app sh /run.sh
   memory: 2GB
-  disk_quota: 1GB
+  disk_quota: 2GB
   health-check-type: process
 

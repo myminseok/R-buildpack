@@ -215,7 +215,20 @@ dependencies:
   cf_stacks:
   - cflinuxfs2
 
+- name: gdebi-core
+  version: 0.9.5.3
+  uri: http://archive.ubuntu.com/ubuntu/pool/main/g/gdebi/gdebi-core_0.9.5.3_all.deb
+  md5: 9904c284605899e98e82d6058390abd4
+  cf_stacks:
+  - cflinuxfs2
 
+
+- name: rstudio-server
+  version: 1.0.153
+  uri: https://download2.rstudio.org/rstudio-server-1.0.153-amd64.deb
+  md5: b8df8478e446851dbe0ce893d32e3e67
+  cf_stacks:
+  - cflinuxfs2
 
 
 
@@ -935,6 +948,18 @@ dependencies:
   - cflinuxfs2
 
 
+- name: libapparmor1
+  version: 2.8.95
+  uri: http://archive.ubuntu.com/ubuntu/pool/main/a/apparmor/libapparmor1_2.8.95~2430-0ubuntu5_amd64.deb
+  md5: 7a978ee50714ece1f82017478a0a7ec3
+  cf_stacks:
+  - cflinuxfs2
+- name: sudo
+  version: 1.8.9
+  uri: http://archive.ubuntu.com/ubuntu/pool/main/s/sudo/sudo_1.8.9p5-1ubuntu1_amd64.deb
+  md5: 622df6b43c28072fd1a47ed7fcbd28f2
+  cf_stacks:
+  - cflinuxfs2
 
 
 
