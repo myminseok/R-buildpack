@@ -20,4 +20,11 @@ export CPATH="$INCLUDE_PATH"
 export CPPPATH="$INCLUDE_PATH"
 export PKG_CONFIG_PATH="$CHROOT_DIR/usr/lib/x86_64-linux-gnu/pkgconfig:$CHROOT_DIR/usr/lib/i386-linux-gnu/pkgconfig:$CHROOT_DIR/usr/lib/pkgconfig:$PKG_CONFIG_PATH"
 
-
+# fix R env
+#cd /usr/lib/R/etc
+#rm /usr/lib/R/etc/Renviron
+#cp Renviron.orig Renviron
+#rm Makeconf
+#ln -s /etc/R/Makeconf Makeconf
+#rm ldpaths
+#ln -s /etc/R/ldpaths ldpaths

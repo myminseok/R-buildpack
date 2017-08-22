@@ -162,9 +162,9 @@ fakechroot fakeroot chroot $CHROOT_DIR /fakeroot_install_apts.sh /apts_from_aptf
 fi
 
 topic "Fixing broken symbolic link in fakeroot[1]"
-fakechroot fakeroot chroot $CHROOT_DIR  /fakeroot_print_broken_link.sh
+#fakechroot fakeroot chroot $CHROOT_DIR  /fakeroot_print_broken_link.sh
 sh $CHROOT_DIR/fakeroot_fix_symlink.sh
-fakechroot fakeroot chroot $CHROOT_DIR  /fakeroot_print_broken_link.sh
+#fakechroot fakeroot chroot $CHROOT_DIR  /fakeroot_print_broken_link.sh
 
 
 topic "Install shiny packages into R"
@@ -186,9 +186,9 @@ cd $CHROOT_DIR
 env
 
 topic "Fixing broken symbolic link in fakeroot[2]"
-fakechroot fakeroot chroot $CHROOT_DIR  /fakeroot_print_broken_link.sh
+#fakechroot fakeroot chroot $CHROOT_DIR  /fakeroot_print_broken_link.sh
 sh $CHROOT_DIR/fakeroot_fix_symlink.sh
-fakechroot fakeroot chroot $CHROOT_DIR  /fakeroot_print_broken_link.sh
+#fakechroot fakeroot chroot $CHROOT_DIR  /fakeroot_print_broken_link.sh
 
 
 rm -rf $CHROOT_DIR/etc/hosts && cp /etc/hosts $CHROOT_DIR/etc/hosts
@@ -197,7 +197,7 @@ rm -rf $CHROOT_DIR/etc/ld.so.cache && cp /etc/ld.so.conf $CHROOT_DIR/etc/ld.so.c
 
 
 
-topic "Install RStudio-server"
+#topic "Install RStudio-server(under dev)"
 mkdir -p $CHROOT_DIR/rstudio_packages
 cd $CHROOT_DIR/rstudio_packages
 $BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR libapparmor1 2.8.95 libapparmor1_2.8.95~2430-0ubuntu5_amd64.deb
@@ -206,7 +206,7 @@ $BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR rstudio-server 1.0.153 rst
 #fakechroot fakeroot chroot $CHROOT_DIR  /fakeroot_install_RStudio.sh
 #rm -rf $CHROOT_DIR/rstudio_packages
 
-topic "Writing profile script"
+topic "Finilizing staging"
 # TODO: create wrapper.
 #cat <<EOF >$CHROOT_DIR/R_setup.sh
 ##!/bin/bash
@@ -228,10 +228,10 @@ mv $CHROOT_DIR/*  $BUILD_DIR
 mkdir -p $BUILD_DIR/.profile.d 
 cp -r $CHROOT_DIR/.profile.d/*  $BUILD_DIR/.profile.d/
 
-topic  "$CHROOT_DIR: "
-ls -al $CHROOT_DIR
-topic  "$BUILD_DIR: "
-ls -al $BUILD_DIR
+#topic  "$CHROOT_DIR: "
+#ls -al $CHROOT_DIR
+#topic  "$BUILD_DIR: "
+#ls -al $BUILD_DIR
 
-
+topic "Staging completed"
 

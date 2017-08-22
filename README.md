@@ -14,7 +14,11 @@ this buildpack inspired from followingbuildpacks.
 
   https://github.com/alexkago/cf-buildpack-r/tree/master/test
   
-  
+
+![image](/image1.png "R on shiny sample")
+
+![image](/image2.png "PCF dev apps manager UI")
+
 # Usage
 ```
 cf push your-R-app -b https://github.com/myminseok/R-buildpack
@@ -94,7 +98,13 @@ https://github.com/cloudfoundry/buildpack-packager/
 Official buildpack documentation can be found at [ruby buildpack docs](http://docs.cloudfoundry.org/buildpacks/ruby/index.html).
 
 # TODO
+R wrapper
+
+R font.
+
 install R studio
 
 minimize buildpack size.
+
+
 
