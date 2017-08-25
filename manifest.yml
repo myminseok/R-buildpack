@@ -154,6 +154,64 @@ dependencies:
   cf_stacks:
   - cflinuxfs2 
 
+
+
+
+
+- name: fakechroot_2.17.2-1_all.deb
+  version: 1
+  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/fakechroot_2.17.2-1_all.deb
+  md5: 5e2a990df4ddbf6158a093e0ccc68acd
+  cf_stacks:
+  - cflinuxfs2
+- name: libfakechroot_2.17.2-1_amd64.deb
+  version: 1
+  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libfakechroot_2.17.2-1_amd64.deb
+  md5: 1d44e7b5355b249a2f99ddc2eb7f8d00
+  cf_stacks:
+  - cflinuxfs2
+- name: libc6-dev_2.19-0ubuntu6.13_amd64.deb
+  version: 1
+  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libc6-dev_2.19-0ubuntu6.13_amd64.deb
+  md5: 173b0cdb7042a6ed040c246ca15d40ea
+  cf_stacks:
+  - cflinuxfs2
+- name: sudo
+  version: 1.8.9
+  uri: http://archive.ubuntu.com/ubuntu/pool/main/s/sudo/sudo_1.8.9p5-1ubuntu1_amd64.deb
+  md5: 622df6b43c28072fd1a47ed7fcbd28f2
+  cf_stacks:
+  - cflinuxfs2
+- name: libapparmor1
+  version: 2.8.95
+  uri: http://archive.ubuntu.com/ubuntu/pool/main/a/apparmor/libapparmor1_2.8.95~2430-0ubuntu5_amd64.deb
+  md5: 7a978ee50714ece1f82017478a0a7ec3
+  cf_stacks:
+  - cflinuxfs2
+- name: gnupg-curl
+  version: 1.4.16
+  uri: http://archive.ubuntu.com/ubuntu/pool/universe/g/gnupg/gnupg-curl_1.4.16-1ubuntu2_amd64.deb
+  md5: a86b3eef2068afba7bb84dd831f4d209
+  cf_stacks:
+  - cflinuxfs2
+- name: gdebi-core
+  version: 0.9.5.3
+  uri: http://archive.ubuntu.com/ubuntu/pool/main/g/gdebi/gdebi-core_0.9.5.3_all.deb
+  md5: 9904c284605899e98e82d6058390abd4
+  cf_stacks:
+  - cflinuxfs2
+- name: rstudio-server
+  version: 1.0.153
+  uri: https://download2.rstudio.org/rstudio-server-1.0.153-amd64.deb
+  md5: b8df8478e446851dbe0ce893d32e3e67
+  cf_stacks:
+  - cflinuxfs2
+
+
+
+
+
+
 - name: httpvu
   version: 1.3.5
   uri: http://cran.us.r-project.org/src/contrib/httpuv_1.3.5.tar.gz
@@ -215,737 +273,725 @@ dependencies:
   cf_stacks:
   - cflinuxfs2
 
-- name: gdebi-core
-  version: 0.9.5.3
-  uri: http://archive.ubuntu.com/ubuntu/pool/main/g/gdebi/gdebi-core_0.9.5.3_all.deb
-  md5: 9904c284605899e98e82d6058390abd4
-  cf_stacks:
-  - cflinuxfs2
 
 
-- name: rstudio-server
-  version: 1.0.153
-  uri: https://download2.rstudio.org/rstudio-server-1.0.153-amd64.deb
-  md5: b8df8478e446851dbe0ce893d32e3e67
-  cf_stacks:
-  - cflinuxfs2
 
 
 
 - name: automake_1_3a1.14.1-2ubuntu1_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/automake_1_3a1.14.1-2ubuntu1_all.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/automake_1_3a1.14.1-2ubuntu1_all.deb
   md5: e9d110c27959df7ac9aef0e1c70d37fd
   cf_stacks:
   - cflinuxfs2
 - name: autotools-dev_20130810.1_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/autotools-dev_20130810.1_all.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/autotools-dev_20130810.1_all.deb
   md5: 31c2af2345b80945a9b60bec2ee31f06
   cf_stacks:
   - cflinuxfs2
 - name: bsdmainutils_9.0.5ubuntu1_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/bsdmainutils_9.0.5ubuntu1_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/bsdmainutils_9.0.5ubuntu1_amd64.deb
   md5: 56d222f6675e7858dfef6097440d373e
   cf_stacks:
   - cflinuxfs2
 - name: cdbs_0.4.122ubuntu2_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/cdbs_0.4.122ubuntu2_all.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/cdbs_0.4.122ubuntu2_all.deb
   md5: 970eb873b3d7de645dacbb4042816e47
   cf_stacks:
   - cflinuxfs2
 - name: debhelper_9.20131227ubuntu1_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/debhelper_9.20131227ubuntu1_all.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/debhelper_9.20131227ubuntu1_all.deb
   md5: 1b50829a28ce8da780c48a47ccb8cfa5
   cf_stacks:
   - cflinuxfs2
 - name: dh-apparmor_2.10.95-0ubuntu2.6~14.04.1_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/dh-apparmor_2.10.95-0ubuntu2.6~14.04.1_all.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/dh-apparmor_2.10.95-0ubuntu2.6~14.04.1_all.deb
   md5: 2ece461fb0c22afaef52138a6b2c4479
   cf_stacks:
   - cflinuxfs2
 - name: dh-translations_121_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/dh-translations_121_all.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/dh-translations_121_all.deb
   md5: 2359f10f56ef056993698cc212d36b23
-  cf_stacks:
-  - cflinuxfs2
-- name: fakechroot_2.17.2-1_all.deb
-  version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/fakechroot_2.17.2-1_all.deb
-  md5: 5e2a990df4ddbf6158a093e0ccc68acd
   cf_stacks:
   - cflinuxfs2
 - name: gettext-base_0.18.3.1-1ubuntu3_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/gettext-base_0.18.3.1-1ubuntu3_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/gettext-base_0.18.3.1-1ubuntu3_amd64.deb
   md5: 22fa5bd1ffb94e10739c14d6e869a69c
   cf_stacks:
   - cflinuxfs2
 - name: gettext_0.18.3.1-1ubuntu3_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/gettext_0.18.3.1-1ubuntu3_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/gettext_0.18.3.1-1ubuntu3_amd64.deb
   md5: 2d6749b006f9163e2f3b6a381f5014ca
   cf_stacks:
   - cflinuxfs2
 - name: gfortran-4.8_4.8.4-2ubuntu1~14.04.3_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/gfortran-4.8_4.8.4-2ubuntu1~14.04.3_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/gfortran-4.8_4.8.4-2ubuntu1~14.04.3_amd64.deb
   md5: 19715227c55359192efce6fdc6caf034
   cf_stacks:
   - cflinuxfs2
 - name: gfortran_4_3a4.8.2-1ubuntu6_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/gfortran_4_3a4.8.2-1ubuntu6_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/gfortran_4_3a4.8.2-1ubuntu6_amd64.deb
   md5: 11f6a08866623420f388007f0f1b444a
   cf_stacks:
   - cflinuxfs2
 - name: groff-base_1.22.2-5_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/groff-base_1.22.2-5_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/groff-base_1.22.2-5_amd64.deb
   md5: de473c3cdced3ff1402bb4d7c3c45137
   cf_stacks:
   - cflinuxfs2
 - name: intltool-debian_0.35.0+20060710.1_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/intltool-debian_0.35.0+20060710.1_all.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/intltool-debian_0.35.0+20060710.1_all.deb
   md5: f44cdcbab68d6dba3bc89ff4df61c64e
   cf_stacks:
   - cflinuxfs2
 - name: intltool_0.50.2-2_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/intltool_0.50.2-2_all.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/intltool_0.50.2-2_all.deb
   md5: 2ce0153413e48213cd4f661aee5d032e
   cf_stacks:
   - cflinuxfs2
 - name: libasprintf-dev_0.18.3.1-1ubuntu3_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libasprintf-dev_0.18.3.1-1ubuntu3_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libasprintf-dev_0.18.3.1-1ubuntu3_amd64.deb
   md5: 4be3274f3b11accb4c0f69ab48b64f3c
   cf_stacks:
   - cflinuxfs2
 - name: libasprintf0c2_0.18.3.1-1ubuntu3_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libasprintf0c2_0.18.3.1-1ubuntu3_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libasprintf0c2_0.18.3.1-1ubuntu3_amd64.deb
   md5: 9f0bcd67a66d789703cd452e65f2e66a
   cf_stacks:
   - cflinuxfs2
 - name: libauthen-sasl-perl_2.1500-1_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libauthen-sasl-perl_2.1500-1_all.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libauthen-sasl-perl_2.1500-1_all.deb
   md5: 77c54d59791a7e684ed60557c512f52e
+  cf_stacks:
+  - cflinuxfs2
+- name: libc-bin_2.19-0ubuntu6.13_amd64.deb
+  version: 1
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libc-bin_2.19-0ubuntu6.13_amd64.deb
+  md5: d0eda1287301e928eed1702b6e4c5378
   cf_stacks:
   - cflinuxfs2
 - name: libc-dev-bin_2.19-0ubuntu6.13_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libc-dev-bin_2.19-0ubuntu6.13_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libc-dev-bin_2.19-0ubuntu6.13_amd64.deb
   md5: bf5123fe6e19a75fbff2c70e7e849203
   cf_stacks:
   - cflinuxfs2
 - name: libc6-dev_2.19-0ubuntu6.13_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libc6-dev_2.19-0ubuntu6.13_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libc6-dev_2.19-0ubuntu6.13_amd64.deb
   md5: 173b0cdb7042a6ed040c246ca15d40ea
   cf_stacks:
   - cflinuxfs2
 - name: libc6_2.19-0ubuntu6.13_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libc6_2.19-0ubuntu6.13_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libc6_2.19-0ubuntu6.13_amd64.deb
   md5: 0f889a629fb59d5644e727549049db57
   cf_stacks:
   - cflinuxfs2
 - name: libelf1_0.158-0ubuntu5.2_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libelf1_0.158-0ubuntu5.2_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libelf1_0.158-0ubuntu5.2_amd64.deb
   md5: 7c622ac0bdb90b547f3cd18c8e7369b0
   cf_stacks:
   - cflinuxfs2
 - name: libencode-locale-perl_1.03-1_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libencode-locale-perl_1.03-1_all.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libencode-locale-perl_1.03-1_all.deb
   md5: 0c83753bf3cd85dc4e0a837d1225ef31
-  cf_stacks:
-  - cflinuxfs2
-- name: libfakechroot_2.17.2-1_amd64.deb
-  version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libfakechroot_2.17.2-1_amd64.deb
-  md5: 1d44e7b5355b249a2f99ddc2eb7f8d00
   cf_stacks:
   - cflinuxfs2
 - name: libfile-basedir-perl_0.03-1fakesync1_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libfile-basedir-perl_0.03-1fakesync1_all.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libfile-basedir-perl_0.03-1fakesync1_all.deb
   md5: be0421f5e8ef45b51a354342edbcd165
   cf_stacks:
   - cflinuxfs2
 - name: libfile-desktopentry-perl_0.07-1_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libfile-desktopentry-perl_0.07-1_all.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libfile-desktopentry-perl_0.07-1_all.deb
   md5: 556e25e3c9edc07cfe59b0d9d1c7c026
   cf_stacks:
   - cflinuxfs2
 - name: libfile-listing-perl_6.04-1_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libfile-listing-perl_6.04-1_all.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libfile-listing-perl_6.04-1_all.deb
   md5: a69f2a45649ddd30a1679e5a90db41c5
   cf_stacks:
   - cflinuxfs2
 - name: libfile-mimeinfo-perl_0.22-1_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libfile-mimeinfo-perl_0.22-1_all.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libfile-mimeinfo-perl_0.22-1_all.deb
   md5: 8bea1816bbf4780675f6f316d05cb1f0
   cf_stacks:
   - cflinuxfs2
 - name: libfont-afm-perl_1.20-1_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libfont-afm-perl_1.20-1_all.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libfont-afm-perl_1.20-1_all.deb
   md5: 2322f8db827053cf4754f6182c30572f
   cf_stacks:
   - cflinuxfs2
 - name: libfontenc1_1_3a1.1.2-1_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libfontenc1_1_3a1.1.2-1_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libfontenc1_1_3a1.1.2-1_amd64.deb
   md5: 51e96240d4244545849b615dcf3c9125
   cf_stacks:
   - cflinuxfs2
 - name: libgettextpo-dev_0.18.3.1-1ubuntu3_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libgettextpo-dev_0.18.3.1-1ubuntu3_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libgettextpo-dev_0.18.3.1-1ubuntu3_amd64.deb
   md5: c73b00b8789ec84d48aa5b7ff6923ff9
   cf_stacks:
   - cflinuxfs2
 - name: libgettextpo0_0.18.3.1-1ubuntu3_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libgettextpo0_0.18.3.1-1ubuntu3_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libgettextpo0_0.18.3.1-1ubuntu3_amd64.deb
   md5: 97ea7718c0de942ccb78d6baa4f2ad5c
   cf_stacks:
   - cflinuxfs2
 - name: libgfortran-4.8-dev_4.8.4-2ubuntu1~14.04.3_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libgfortran-4.8-dev_4.8.4-2ubuntu1~14.04.3_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libgfortran-4.8-dev_4.8.4-2ubuntu1~14.04.3_amd64.deb
   md5: a7ca9ca2fae011de8d8b2b49cacf2b4d
   cf_stacks:
   - cflinuxfs2
 - name: libgl1-mesa-dri_10.1.3-0ubuntu0.6_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libgl1-mesa-dri_10.1.3-0ubuntu0.6_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libgl1-mesa-dri_10.1.3-0ubuntu0.6_amd64.deb
   md5: f7dbf4c1e51262b970f023a3e5346c90
   cf_stacks:
   - cflinuxfs2
 - name: libgl1-mesa-glx_10.1.3-0ubuntu0.6_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libgl1-mesa-glx_10.1.3-0ubuntu0.6_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libgl1-mesa-glx_10.1.3-0ubuntu0.6_amd64.deb
   md5: 47440d679d91118f52b692795d08bc33
   cf_stacks:
   - cflinuxfs2
 - name: libglapi-mesa_10.1.3-0ubuntu0.6_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libglapi-mesa_10.1.3-0ubuntu0.6_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libglapi-mesa_10.1.3-0ubuntu0.6_amd64.deb
   md5: 036734591b144bca4a1bf0191aa2e837
   cf_stacks:
   - cflinuxfs2
 - name: libhtml-form-perl_6.03-1_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libhtml-form-perl_6.03-1_all.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libhtml-form-perl_6.03-1_all.deb
   md5: 17f4cd2bfc8ea3fc9e2643f4c92de476
   cf_stacks:
   - cflinuxfs2
 - name: libhtml-format-perl_2.11-1_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libhtml-format-perl_2.11-1_all.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libhtml-format-perl_2.11-1_all.deb
   md5: 004bee852db8b3e931330a24c202bb1a
   cf_stacks:
   - cflinuxfs2
 - name: libhtml-parser-perl_3.71-1build1_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libhtml-parser-perl_3.71-1build1_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libhtml-parser-perl_3.71-1build1_amd64.deb
   md5: b6dc521044b52142a8c421182c28e75c
   cf_stacks:
   - cflinuxfs2
 - name: libhtml-tagset-perl_3.20-2_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libhtml-tagset-perl_3.20-2_all.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libhtml-tagset-perl_3.20-2_all.deb
   md5: 86862a4ac995db738fcfd012275fc3a7
   cf_stacks:
   - cflinuxfs2
 - name: libhtml-tree-perl_5.03-1_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libhtml-tree-perl_5.03-1_all.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libhtml-tree-perl_5.03-1_all.deb
   md5: 729d76cfb610be4561b0b1d7e5062840
   cf_stacks:
   - cflinuxfs2
 - name: libhttp-cookies-perl_6.00-2_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libhttp-cookies-perl_6.00-2_all.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libhttp-cookies-perl_6.00-2_all.deb
   md5: 6bd4e1b4aee1b60fbf4008f79575defd
   cf_stacks:
   - cflinuxfs2
 - name: libhttp-daemon-perl_6.01-1_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libhttp-daemon-perl_6.01-1_all.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libhttp-daemon-perl_6.01-1_all.deb
   md5: 2377c14ea7e8e064db4720f0b1c1ca5b
   cf_stacks:
   - cflinuxfs2
 - name: libhttp-date-perl_6.02-1_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libhttp-date-perl_6.02-1_all.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libhttp-date-perl_6.02-1_all.deb
   md5: 3aee8ce5ae257f3dfea03d2127dfc845
   cf_stacks:
   - cflinuxfs2
 - name: libhttp-message-perl_6.06-1_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libhttp-message-perl_6.06-1_all.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libhttp-message-perl_6.06-1_all.deb
   md5: 9ef47ed10b2bb198a2183ce7063629cd
   cf_stacks:
   - cflinuxfs2
 - name: libhttp-negotiate-perl_6.00-2_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libhttp-negotiate-perl_6.00-2_all.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libhttp-negotiate-perl_6.00-2_all.deb
   md5: 702cbbf6e3fea8eac863a0ffa34d4645
   cf_stacks:
   - cflinuxfs2
 - name: libio-html-perl_1.00-1_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libio-html-perl_1.00-1_all.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libio-html-perl_1.00-1_all.deb
   md5: 6bf2efdb0837c937e96fa84e6737904c
   cf_stacks:
   - cflinuxfs2
 - name: libio-socket-inet6-perl_2.71-1_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libio-socket-inet6-perl_2.71-1_all.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libio-socket-inet6-perl_2.71-1_all.deb
   md5: 01296fc7286aaf5eabd694e605a24246
   cf_stacks:
   - cflinuxfs2
 - name: libio-socket-ssl-perl_1.965-1ubuntu1_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libio-socket-ssl-perl_1.965-1ubuntu1_all.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libio-socket-ssl-perl_1.965-1ubuntu1_all.deb
   md5: bb4b971bf399663961550f78200b1408
+  cf_stacks:
+  - cflinuxfs2
+- name: liblapack-dev_3.5.0-2ubuntu1_amd64.deb
+  version: 1
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/liblapack-dev_3.5.0-2ubuntu1_amd64.deb
+  md5: 60a23fd352cae3c71eb5bf5c3b95cd87
+  cf_stacks:
+  - cflinuxfs2
+- name: liblapack3_3.5.0-2ubuntu1_amd64.deb
+  version: 1
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/liblapack3_3.5.0-2ubuntu1_amd64.deb
+  md5: 8cd3e8d2924872557e686a295436c19f
   cf_stacks:
   - cflinuxfs2
 - name: libllvm3.4_1_3a3.4-1ubuntu3_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libllvm3.4_1_3a3.4-1ubuntu3_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libllvm3.4_1_3a3.4-1ubuntu3_amd64.deb
   md5: ce34c38ebc9452526f3710ad79456b2f
   cf_stacks:
   - cflinuxfs2
 - name: liblwp-mediatypes-perl_6.02-1_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/liblwp-mediatypes-perl_6.02-1_all.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/liblwp-mediatypes-perl_6.02-1_all.deb
   md5: 654e7f05d341f4a859799eec9538b2c0
   cf_stacks:
   - cflinuxfs2
 - name: liblwp-protocol-https-perl_6.04-2ubuntu0.1_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/liblwp-protocol-https-perl_6.04-2ubuntu0.1_all.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/liblwp-protocol-https-perl_6.04-2ubuntu0.1_all.deb
   md5: 40ce2a59dd346d53651fd0882ae67da6
   cf_stacks:
   - cflinuxfs2
 - name: libmail-sendmail-perl_0.79.16-1_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libmail-sendmail-perl_0.79.16-1_all.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libmail-sendmail-perl_0.79.16-1_all.deb
   md5: 773c8b4c576f4a7ccf0c220d067750ac
   cf_stacks:
   - cflinuxfs2
 - name: libmailtools-perl_2.12-1_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libmailtools-perl_2.12-1_all.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libmailtools-perl_2.12-1_all.deb
   md5: c4ae7cadbfedb24d516350ffb60373a9
   cf_stacks:
   - cflinuxfs2
 - name: libnet-http-perl_6.06-1_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libnet-http-perl_6.06-1_all.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libnet-http-perl_6.06-1_all.deb
   md5: be81a58e1fa9b014923cc0ac8e992c59
   cf_stacks:
   - cflinuxfs2
 - name: libnet-smtp-ssl-perl_1.01-3_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libnet-smtp-ssl-perl_1.01-3_all.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libnet-smtp-ssl-perl_1.01-3_all.deb
   md5: 614bd815b2caa0c3643aa64043d2a038
   cf_stacks:
   - cflinuxfs2
 - name: libnet-ssleay-perl_1.58-1_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libnet-ssleay-perl_1.58-1_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libnet-ssleay-perl_1.58-1_amd64.deb
   md5: b4a1654a94f3cd8a6339c15e210f8886
+  cf_stacks:
+  - cflinuxfs2
+- name: libopenblas-base_0.2.8-6ubuntu1_amd64.deb
+  version: 1
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libopenblas-base_0.2.8-6ubuntu1_amd64.deb
+  md5: ee142ecd3dbbdec35f539ed654ecff16
+  cf_stacks:
+  - cflinuxfs2
+- name: libopenblas-dev_0.2.8-6ubuntu1_amd64.deb
+  version: 1
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libopenblas-dev_0.2.8-6ubuntu1_amd64.deb
+  md5: e7137f3bb52f457a0854601947f95ccb
   cf_stacks:
   - cflinuxfs2
 - name: libpaper-utils_1.1.24+nmu2ubuntu3_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libpaper-utils_1.1.24+nmu2ubuntu3_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libpaper-utils_1.1.24+nmu2ubuntu3_amd64.deb
   md5: c1785586284f17aff8249d186e5c6984
   cf_stacks:
   - cflinuxfs2
 - name: libpaper1_1.1.24+nmu2ubuntu3_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libpaper1_1.1.24+nmu2ubuntu3_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libpaper1_1.1.24+nmu2ubuntu3_amd64.deb
   md5: 531fe052e528e0e85be967b9384701b8
   cf_stacks:
   - cflinuxfs2
 - name: libpipeline1_1.3.0-1_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libpipeline1_1.3.0-1_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libpipeline1_1.3.0-1_amd64.deb
   md5: b2ec01902378b50dfda3f9ba831712db
   cf_stacks:
   - cflinuxfs2
 - name: libreadline-dev_6.3-4ubuntu2_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libreadline-dev_6.3-4ubuntu2_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libreadline-dev_6.3-4ubuntu2_amd64.deb
   md5: 70efa267def490955ef3c54bdd8f290e
   cf_stacks:
   - cflinuxfs2
 - name: libsocket6-perl_0.25-1_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libsocket6-perl_0.25-1_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libsocket6-perl_0.25-1_amd64.deb
   md5: 8900a6107bfd79bd4a43c91201225d7b
   cf_stacks:
   - cflinuxfs2
 - name: libsys-hostname-long-perl_1.4-3_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libsys-hostname-long-perl_1.4-3_all.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libsys-hostname-long-perl_1.4-3_all.deb
   md5: b9ea42fa48a38f9a1a38c50fa15182c8
   cf_stacks:
   - cflinuxfs2
-- name: libtcl8.5_8.5.15-2ubuntu1_amd64.deb
+- name: libtcl8.6_8.6.1-4ubuntu1_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libtcl8.5_8.5.15-2ubuntu1_amd64.deb
-  md5: f313c1a20c44b71bf503a1ef48607a57
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libtcl8.6_8.6.1-4ubuntu1_amd64.deb
+  md5: ad96d8565e68fa57b92e7d99fb0474ae
   cf_stacks:
   - cflinuxfs2
-- name: libtk8.5_8.5.15-2ubuntu3_amd64.deb
+- name: libtk8.6_8.6.1-3ubuntu2_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libtk8.5_8.5.15-2ubuntu3_amd64.deb
-  md5: 3166bca46986c1680a6a521a6169330e
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libtk8.6_8.6.1-3ubuntu2_amd64.deb
+  md5: fb283a1a68617ce500832c052cddb467
   cf_stacks:
   - cflinuxfs2
 - name: libtxc-dxtn-s2tc0_0~git20131104-1.1_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libtxc-dxtn-s2tc0_0~git20131104-1.1_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libtxc-dxtn-s2tc0_0~git20131104-1.1_amd64.deb
   md5: 4aca9162717cd9eb1e42f531217801f9
   cf_stacks:
   - cflinuxfs2
 - name: libunistring0_0.9.3-5ubuntu3_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libunistring0_0.9.3-5ubuntu3_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libunistring0_0.9.3-5ubuntu3_amd64.deb
   md5: 256e18209ad74bc9e6752290f2a5444f
   cf_stacks:
   - cflinuxfs2
 - name: liburi-perl_1.60-1_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/liburi-perl_1.60-1_all.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/liburi-perl_1.60-1_all.deb
   md5: 70db2c9058d77f825487105eda74af32
-  cf_stacks:
-  - cflinuxfs2
-- name: libutempter0_1.1.5-4build1_amd64.deb
-  version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libutempter0_1.1.5-4build1_amd64.deb
-  md5: a883406e2bd15e1fefe82c4bb7989f48
   cf_stacks:
   - cflinuxfs2
 - name: libwww-perl_6.05-2_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libwww-perl_6.05-2_all.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libwww-perl_6.05-2_all.deb
   md5: 9b4afd35256fad3c9d8a11f5aa2253a3
   cf_stacks:
   - cflinuxfs2
 - name: libwww-robotrules-perl_6.01-1_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libwww-robotrules-perl_6.01-1_all.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libwww-robotrules-perl_6.01-1_all.deb
   md5: 95112b59013c9e643ada5ddddb62d9b8
   cf_stacks:
   - cflinuxfs2
 - name: libx11-xcb1_2_3a1.6.2-1ubuntu2_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libx11-xcb1_2_3a1.6.2-1ubuntu2_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libx11-xcb1_2_3a1.6.2-1ubuntu2_amd64.deb
   md5: 883e22f0ff03018c9fad15b5c10a2fca
   cf_stacks:
   - cflinuxfs2
 - name: libxaw7_2_3a1.0.12-1_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libxaw7_2_3a1.0.12-1_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libxaw7_2_3a1.0.12-1_amd64.deb
   md5: 2e435fc5f1fadecc225bd8de259d4d16
   cf_stacks:
   - cflinuxfs2
 - name: libxcb-dri2-0_1.10-2ubuntu1_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libxcb-dri2-0_1.10-2ubuntu1_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libxcb-dri2-0_1.10-2ubuntu1_amd64.deb
   md5: 90169585d4c43e4a4da49ce3f2568384
   cf_stacks:
   - cflinuxfs2
 - name: libxcb-dri3-0_1.10-2ubuntu1_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libxcb-dri3-0_1.10-2ubuntu1_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libxcb-dri3-0_1.10-2ubuntu1_amd64.deb
   md5: 310d42718a6d50f1be400e1fa774d86a
   cf_stacks:
   - cflinuxfs2
 - name: libxcb-glx0_1.10-2ubuntu1_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libxcb-glx0_1.10-2ubuntu1_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libxcb-glx0_1.10-2ubuntu1_amd64.deb
   md5: 632239048a95f7c2edd3225de98ed801
   cf_stacks:
   - cflinuxfs2
 - name: libxcb-present0_1.10-2ubuntu1_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libxcb-present0_1.10-2ubuntu1_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libxcb-present0_1.10-2ubuntu1_amd64.deb
   md5: e17e52f8953a544d1f0a56a156e6c7f5
   cf_stacks:
   - cflinuxfs2
 - name: libxcb-shape0_1.10-2ubuntu1_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libxcb-shape0_1.10-2ubuntu1_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libxcb-shape0_1.10-2ubuntu1_amd64.deb
   md5: 01d218f4542e124c1f831efe6b10b7bf
   cf_stacks:
   - cflinuxfs2
 - name: libxcb-sync1_1.10-2ubuntu1_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libxcb-sync1_1.10-2ubuntu1_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libxcb-sync1_1.10-2ubuntu1_amd64.deb
   md5: 6cdc1b75cfb4797da9d19add8646a70e
   cf_stacks:
   - cflinuxfs2
 - name: libxml-parser-perl_2.41-1build3_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libxml-parser-perl_2.41-1build3_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libxml-parser-perl_2.41-1build3_amd64.deb
   md5: fd052f7f2de02b9584022deb7c380cfc
   cf_stacks:
   - cflinuxfs2
 - name: libxmu6_2_3a1.1.1-1_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libxmu6_2_3a1.1.1-1_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libxmu6_2_3a1.1.1-1_amd64.deb
   md5: 48a42f9388279603a2ca014dae68163d
   cf_stacks:
   - cflinuxfs2
 - name: libxmuu1_2_3a1.1.1-1_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libxmuu1_2_3a1.1.1-1_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libxmuu1_2_3a1.1.1-1_amd64.deb
   md5: 7c78415539294b1c5531260d90643c7d
   cf_stacks:
   - cflinuxfs2
 - name: libxshmfence1_1.1-2_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libxshmfence1_1.1-2_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libxshmfence1_1.1-2_amd64.deb
   md5: 921fc248a972eb54e063759eaec9fe83
   cf_stacks:
   - cflinuxfs2
 - name: libxss1_1_3a1.2.2-1_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libxss1_1_3a1.2.2-1_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libxss1_1_3a1.2.2-1_amd64.deb
   md5: 220597ceedea46bfd994639c481b2304
   cf_stacks:
   - cflinuxfs2
 - name: libxtst6_2_3a1.2.2-1_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libxtst6_2_3a1.2.2-1_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libxtst6_2_3a1.2.2-1_amd64.deb
   md5: 2594435dcd76d6eec2ff3fb68a3d4e9d
   cf_stacks:
   - cflinuxfs2
 - name: libxv1_2_3a1.0.10-1_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libxv1_2_3a1.0.10-1_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libxv1_2_3a1.0.10-1_amd64.deb
   md5: 69d7d99c89db7d5caa67d2c09263360a
   cf_stacks:
   - cflinuxfs2
 - name: libxxf86dga1_2_3a1.1.4-1_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libxxf86dga1_2_3a1.1.4-1_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libxxf86dga1_2_3a1.1.4-1_amd64.deb
   md5: 8ebd7f1231e2b15912cf0eae4f42d793
   cf_stacks:
   - cflinuxfs2
 - name: libxxf86vm1_1_3a1.1.3-1_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/libxxf86vm1_1_3a1.1.3-1_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/libxxf86vm1_1_3a1.1.3-1_amd64.deb
   md5: b61960ea6bd4f73ff903f63235b35c25
   cf_stacks:
   - cflinuxfs2
 - name: man-db_2.6.7.1-1ubuntu1_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/man-db_2.6.7.1-1ubuntu1_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/man-db_2.6.7.1-1ubuntu1_amd64.deb
   md5: e09d8053471fab73f8bc353252ff6dc4
   cf_stacks:
   - cflinuxfs2
 - name: po-debconf_1.0.16+nmu2ubuntu1_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/po-debconf_1.0.16+nmu2ubuntu1_all.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/po-debconf_1.0.16+nmu2ubuntu1_all.deb
   md5: a5082456ae633b9efb4bc0f483039fad
   cf_stacks:
   - cflinuxfs2
 - name: python-scour_0.26-3build1_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/python-scour_0.26-3build1_all.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/python-scour_0.26-3build1_all.deb
   md5: 92ba87009348de2e2953dd75dccc67ee
   cf_stacks:
   - cflinuxfs2
-- name: r-base-core_3.0.2-1ubuntu1_amd64.deb
+- name: r-base-core_3.4.1-2trusty0_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/r-base-core_3.0.2-1ubuntu1_amd64.deb
-  md5: 97ffe4366c3bc5dab6cee1ff30517664
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/r-base-core_3.4.1-2trusty0_amd64.deb
+  md5: 1924779b44cf6ad1c58e7a491fc6e65c
   cf_stacks:
   - cflinuxfs2
-- name: r-base-dev_3.0.2-1ubuntu1_all.deb
+- name: r-base-dev_3.4.1-2trusty0_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/r-base-dev_3.0.2-1ubuntu1_all.deb
-  md5: 2e5b6f1f6f73bf2bbd02973ce5343294
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/r-base-dev_3.4.1-2trusty0_all.deb
+  md5: 9454eaeddae7897cd4c4face6d19d895
   cf_stacks:
   - cflinuxfs2
-- name: r-base-html_3.0.2-1ubuntu1_all.deb
+- name: r-base-html_3.4.1-2trusty0_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/r-base-html_3.0.2-1ubuntu1_all.deb
-  md5: 74b3419319f49804026cba3000247dd1
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/r-base-html_3.4.1-2trusty0_all.deb
+  md5: ca8266351579d896dd04b69c542aa53b
   cf_stacks:
   - cflinuxfs2
-- name: r-base_3.0.2-1ubuntu1_all.deb
+- name: r-base_3.4.1-2trusty0_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/r-base_3.0.2-1ubuntu1_all.deb
-  md5: adebbdf314b38ca4f904a8b3e118ac09
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/r-base_3.4.1-2trusty0_all.deb
+  md5: b91dcda8631d7a81b3f098576fa0b4ed
   cf_stacks:
   - cflinuxfs2
-- name: r-cran-boot_1.3-9-1_all.deb
+- name: r-cran-boot_1.3-20-1trusty0_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/r-cran-boot_1.3-9-1_all.deb
-  md5: 4bf6c02d792a6b05799f5a8d41f7338b
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/r-cran-boot_1.3-20-1trusty0_all.deb
+  md5: 954ad2a0fb6450fd21b691b5402ef4ef
   cf_stacks:
   - cflinuxfs2
-- name: r-cran-class_7.3-9-1_amd64.deb
+- name: r-cran-class_7.3-14-2trusty0_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/r-cran-class_7.3-9-1_amd64.deb
-  md5: 915223535da104359ec38ff627b16787
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/r-cran-class_7.3-14-2trusty0_amd64.deb
+  md5: 67c48d451ae33750039a74a23d734510
   cf_stacks:
   - cflinuxfs2
-- name: r-cran-cluster_1.14.4-1_amd64.deb
+- name: r-cran-cluster_2.0.6-2trusty0_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/r-cran-cluster_1.14.4-1_amd64.deb
-  md5: 43f470759aec6bbbbf779f2b28bb6a62
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/r-cran-cluster_2.0.6-2trusty0_amd64.deb
+  md5: 2ad8bced1f09fa21d090d4617d27ef9d
   cf_stacks:
   - cflinuxfs2
-- name: r-cran-codetools_0.2-8-2_all.deb
+- name: r-cran-codetools_0.2-15-1cran1trusty0_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/r-cran-codetools_0.2-8-2_all.deb
-  md5: f030dd826d8912ce2ed7a5dde1c7c8c0
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/r-cran-codetools_0.2-15-1cran1trusty0_all.deb
+  md5: 27c7ac47b394ddab82fa02bf37aeb309
   cf_stacks:
   - cflinuxfs2
-- name: r-cran-foreign_0.8.59-1_amd64.deb
+- name: r-cran-foreign_0.8.69-1trusty0_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/r-cran-foreign_0.8.59-1_amd64.deb
-  md5: f8b284b88f579954c2a0a16817f5f6ca
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/r-cran-foreign_0.8.69-1trusty0_amd64.deb
+  md5: cb8805205622fdad4fd8a32c3def7bee
   cf_stacks:
   - cflinuxfs2
-- name: r-cran-kernsmooth_2.23-10-2_amd64.deb
+- name: r-cran-kernsmooth_2.23-15-3trusty0_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/r-cran-kernsmooth_2.23-10-2_amd64.deb
-  md5: 32c86ede8414ab8ea5459a85a4726ed6
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/r-cran-kernsmooth_2.23-15-3trusty0_amd64.deb
+  md5: 670612fe7c5e8d40c89792deaf692341
   cf_stacks:
   - cflinuxfs2
-- name: r-cran-lattice_0.20-24-1_amd64.deb
+- name: r-cran-lattice_0.20-35-1cran1trusty0_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/r-cran-lattice_0.20-24-1_amd64.deb
-  md5: 8023bb019c871d3e58ac3f421cb78c03
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/r-cran-lattice_0.20-35-1cran1trusty0_amd64.deb
+  md5: b9b1aae6c0fedead6923808ec54fb985
   cf_stacks:
   - cflinuxfs2
-- name: r-cran-mass_7.3-29-1_amd64.deb
+- name: r-cran-mass_7.3-47-1trusty0_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/r-cran-mass_7.3-29-1_amd64.deb
-  md5: 1f3a823f8d08e10881509c1c1551b2dd
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/r-cran-mass_7.3-47-1trusty0_amd64.deb
+  md5: dbaf5222b1fedd05e46b9ca15becc95b
   cf_stacks:
   - cflinuxfs2
-- name: r-cran-matrix_1.1-2-1_amd64.deb
+- name: r-cran-matrix_1.2-11-1trusty0_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/r-cran-matrix_1.1-2-1_amd64.deb
-  md5: bd91e41e32dc2fc2a84e2ab1b08e79ee
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/r-cran-matrix_1.2-11-1trusty0_amd64.deb
+  md5: 179833fbddc3ef7f516a5de82b8287ab
   cf_stacks:
   - cflinuxfs2
-- name: r-cran-mgcv_1.7-28-1_amd64.deb
+- name: r-cran-mgcv_1.8-18-1trusty0_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/r-cran-mgcv_1.7-28-1_amd64.deb
-  md5: ed0e3f09967562a668dee20307525524
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/r-cran-mgcv_1.8-18-1trusty0_amd64.deb
+  md5: 27c83b3042a22ad72f723713d5b783b1
   cf_stacks:
   - cflinuxfs2
-- name: r-cran-nlme_3.1.113-1_amd64.deb
+- name: r-cran-nlme_3.1.131-3trusty0_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/r-cran-nlme_3.1.113-1_amd64.deb
-  md5: 2e5b82ddf295276a415aa3c54071d6fd
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/r-cran-nlme_3.1.131-3trusty0_amd64.deb
+  md5: 497fbce01adf08510077b615b9eff990
   cf_stacks:
   - cflinuxfs2
-- name: r-cran-nnet_7.3-7-1_amd64.deb
+- name: r-cran-nnet_7.3-12-2trusty0_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/r-cran-nnet_7.3-7-1_amd64.deb
-  md5: 04a09d91a91de797d23b4c5413160ae2
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/r-cran-nnet_7.3-12-2trusty0_amd64.deb
+  md5: 78780255bc9087b0be5fdf4bc5074465
   cf_stacks:
   - cflinuxfs2
-- name: r-cran-rpart_4.1-5-1_amd64.deb
+- name: r-cran-rpart_4.1-11-1trusty0_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/r-cran-rpart_4.1-5-1_amd64.deb
-  md5: 70f5a206b01be4a97f54cbdb50c96802
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/r-cran-rpart_4.1-11-1trusty0_amd64.deb
+  md5: 5cb27feaf6370cb45d15bb1b38a90f7a
   cf_stacks:
   - cflinuxfs2
-- name: r-cran-spatial_7.3-7-1_amd64.deb
+- name: r-cran-spatial_7.3-10-1trusty0_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/r-cran-spatial_7.3-7-1_amd64.deb
-  md5: ee729b73cf58f1312eec2fb5e657e80b
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/r-cran-spatial_7.3-10-1trusty0_amd64.deb
+  md5: 2e171ba9bc587ef81e26ebd7bb3df5de
   cf_stacks:
   - cflinuxfs2
-- name: r-cran-survival_2.37-7-1_amd64.deb
+- name: r-cran-survival_2.41-3-2trusty0_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/r-cran-survival_2.37-7-1_amd64.deb
-  md5: 6d4b5f6ad424913d5ede95d6cbb3a399
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/r-cran-survival_2.41-3-2trusty0_amd64.deb
+  md5: b666b2a19ad9294177f6f5ae5faaba47
   cf_stacks:
   - cflinuxfs2
-- name: r-doc-html_3.0.2-1ubuntu1_all.deb
+- name: r-doc-html_3.4.1-2trusty0_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/r-doc-html_3.0.2-1ubuntu1_all.deb
-  md5: fc7f5a80ab96b2367834f5c1c624bd35
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/r-doc-html_3.4.1-2trusty0_all.deb
+  md5: 56cff66d8443b48e641f0decf5f076bb
   cf_stacks:
   - cflinuxfs2
-- name: r-recommended_3.0.2-1ubuntu1_all.deb
+- name: r-recommended_3.4.1-2trusty0_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/r-recommended_3.0.2-1ubuntu1_all.deb
-  md5: 8dc3eb4349cd263f65aa2f118e6aade9
-  cf_stacks:
-  - cflinuxfs2
-- name: tcl8.5_8.5.15-2ubuntu1_amd64.deb
-  version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/tcl8.5_8.5.15-2ubuntu1_amd64.deb
-  md5: 98c35f631ef8db6d398e3e0aed33351d
-  cf_stacks:
-  - cflinuxfs2
-- name: tk8.5_8.5.15-2ubuntu3_amd64.deb
-  version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/tk8.5_8.5.15-2ubuntu3_amd64.deb
-  md5: 800183902529277045c8e19596ef10c7
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/r-recommended_3.4.1-2trusty0_all.deb
+  md5: c801bc9685d5334f315788f451d4e769
   cf_stacks:
   - cflinuxfs2
 - name: x11-utils_7.7+1_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/x11-utils_7.7+1_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/x11-utils_7.7+1_amd64.deb
   md5: 784be88acb7a6f944c1fdcb2776049a3
   cf_stacks:
   - cflinuxfs2
 - name: x11-xserver-utils_7.7+2ubuntu1_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/x11-xserver-utils_7.7+2ubuntu1_amd64.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/x11-xserver-utils_7.7+2ubuntu1_amd64.deb
   md5: 597e0045c6d46e40a870428a1bcb01d0
   cf_stacks:
   - cflinuxfs2
-- name: xbitmaps_1.1.1-2_all.deb
+- name: xauth_1_3a1.0.7-1ubuntu1_amd64.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/xbitmaps_1.1.1-2_all.deb
-  md5: 706d6b2d5ebcbee9feaed84d7d1df014
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/xauth_1_3a1.0.7-1ubuntu1_amd64.deb
+  md5: 685acf3035a5d99f2bd9be83c730fad8
   cf_stacks:
   - cflinuxfs2
 - name: xdg-utils_1.1.0~rc1-2ubuntu7.1_all.deb
   version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/xdg-utils_1.1.0~rc1-2ubuntu7.1_all.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/xdg-utils_1.1.0~rc1-2ubuntu7.1_all.deb
   md5: 3e1e672ea1e917cbc4ead2e18dfceb7e
   cf_stacks:
   - cflinuxfs2
-- name: xterm_297-1ubuntu1_amd64.deb
-  version: 1
-  uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/xterm_297-1ubuntu1_amd64.deb
-  md5: 0d43c2141bc640b8c6a37506f0edcfc1
-  cf_stacks:
-  - cflinuxfs2
+
+
+
+
+
+
 
 
 - name: libapparmor1

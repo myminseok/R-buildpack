@@ -6,9 +6,11 @@
 ## 2. copy  manifest_meta.yml into manifest.yml
 ## 3. build buildpack.
 
-abs_path=$(realpath $1)
+work_dir=$1
+if [ -z $1 ]; then 	work_dir="."; fi
+abs_path=$(realpath $work_dir)
 
-outfile=$abs_path/manifest_meta.yml
+outfile=$abs_path/_manifest_meta.yml
 echo "" > $outfile
 
 for DEB in $(ls -1 $abs_path/*.deb); do
