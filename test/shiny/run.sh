@@ -1,7 +1,9 @@
 #!/bin/bash
-source /root/.bashrc
 
-source /.profile.d/r_environment.sh
+. /root/.bashrc
+
+. /.profile.d/r_environment.sh
+
 ## 
 mkdir -p ./src/contrib/PACKAGES
 

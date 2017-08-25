@@ -14,5 +14,9 @@ ln -s /etc/R/ldpaths ldpaths
 export EDITOR=vim
 R --no-save --quiet --slave --file=$1
 
-# R -e "install.packages('shiny', repos='http://cran.us.r-project.org')"
+## R -e "install.packages('shiny', repos='http://cran.us.r-project.org')"
+## install.packages("mime", repos='http://cran.us.r-project.org')
+## install.packages("Rcpp", repos='http://cran.us.r-project.org')
+## install.packages("geoR", repos='http://cran.us.r-project.org')
+
 exit
