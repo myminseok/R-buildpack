@@ -60,6 +60,7 @@ cp $BUILDPACK_DIR/bin/R/fakeroot_print_broken_link.sh $CHROOT_DIR/fakeroot_print
 cp $BUILDPACK_DIR/bin/R/fakeroot_fix_symlink.sh $CHROOT_DIR/fakeroot_fix_symlink.sh
 cp $BUILDPACK_DIR/bin/R/fakeroot_install_shiny_to_R.sh $CHROOT_DIR/fakeroot_install_shiny_to_R.sh
 cp $BUILDPACK_DIR/bin/R/fakeroot_install_RStudio.sh $CHROOT_DIR/fakeroot_install_RStudio.sh
+cp $BUILDPACK_DIR/bin/R/fakeroot_run_init_r.sh $CHROOT_DIR/fakeroot_run_init_r.sh
 cp $BUILDPACK_DIR/bin/R/r_environment.sh $CHROOT_DIR/.profile.d/r_environment.sh 
 cp $BUILDPACK_DIR/bin/R/fakeroot.sh $CHROOT_DIR/fakeroot.sh 
 
@@ -83,6 +84,7 @@ mkdir -p $CHROOT_DIR/usr/include &&  cp -R /usr/include/* $CHROOT_DIR/usr/includ
 mkdir -p $CHROOT_DIR/usr/share && cp -R /usr/share/perl*  $CHROOT_DIR/usr/share/
 mkdir -p $CHROOT_DIR/usr/lib && cp -R /usr/lib/perl*  $CHROOT_DIR/usr/lib/
 mkdir -p $CHROOT_DIR/var/lib/dpkg
+mkdir -p $CHROOT_DIR/src/contrib/  # for some source compile packages in R. (ggplot2)
 
 export PRUNE_EXPR="-path /root -o -path /tmp -o -path /proc -o -path /sys -o -path /lost+found -o -path /etc/ssl/private -o -path /var/spool -o -path /var/cache -o -path /var/log"
 find / \( $PRUNE_EXPR \) -prune -o -print | grep python | grep -v lock | grep -v Lock > list_python && cat list_python | cpio -p -dum $CHROOT_DIR 
@@ -131,11 +133,14 @@ topic "Checking dpkg environment in fakechroot"
 fakechroot fakeroot chroot $CHROOT_DIR dpkg --configure -a
 
 topic "Installing apts from buildpack into fakechroot"
-mkdir -p cd $CHROOT_DIR/apts_from_buildpack && cp $BUILDPACK_DIR/dependencies/*.deb $CHROOT_DIR/apts_from_buildpack
-fakechroot fakeroot chroot $CHROOT_DIR /fakeroot_install_apts.sh /apts_from_buildpack
+mkdir -p $CHROOT_DIR/apts_from_buildpack && cp $BUILDPACK_DIR/dependencies/*.deb $CHROOT_DIR/apts_from_buildpack
+fakechroot fakeroot chroot $CHROOT_DIR /fakeroot_install_apts.sh /apts_from_buildpack 2>&1 | indent
 rm -rf $CHROOT_DIR/apts_from_buildpack
 
-topic "Installing apts from Aptfile into fakechroot"
+
+
+
+topic "Installing apts from Aptfile(online download)"
 if [ -s $BUILD_DIR/Aptfile ]; then
 for PACKAGE in $(cat $BUILD_DIR/Aptfile); do
   if [[ $PACKAGE == *deb ]]; then
@@ -158,16 +163,19 @@ done
 ## /apts_from_aptfile folder to download *.deb which can be use to make buildpack later.
 #**************************************************************************************************
 mkdir -p cd $CHROOT_DIR/apts_from_aptfile && cp -R $APT_CACHE_DIR/archives/*.deb $CHROOT_DIR/apts_from_aptfile
-fakechroot fakeroot chroot $CHROOT_DIR /fakeroot_install_apts.sh /apts_from_aptfile
+fakechroot fakeroot chroot $CHROOT_DIR /fakeroot_install_apts.sh /apts_from_aptfile 2>&1 | indent
 fi
 
+
 topic "Fixing broken symbolic link in fakeroot[1]"
-#fakechroot fakeroot chroot $CHROOT_DIR  /fakeroot_print_broken_link.sh
-sh $CHROOT_DIR/fakeroot_fix_symlink.sh
-#fakechroot fakeroot chroot $CHROOT_DIR  /fakeroot_print_broken_link.sh
+#fakechroot fakeroot chroot $CHROOT_DIR  /fakeroot_print_broken_link.sh 2>&1 | indent
+sh $CHROOT_DIR/fakeroot_fix_symlink.sh 2>&1 | indent
+#fakechroot fakeroot chroot $CHROOT_DIR  /fakeroot_print_broken_link.sh 2>&1 | indent
 
 
-topic "Install shiny packages into R"
+
+
+topic "Install shiny packages into R (offline from buildpack)"
 mkdir -p $CHROOT_DIR/shiny_packages
 cd $CHROOT_DIR/shiny_packages
 $BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR Rcpp 0.12.12 Rcpp_0.12.12.tar.gz
@@ -180,15 +188,60 @@ $BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR htmltools 0.3.6 htmltools_
 $BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR R6 2.2.2 R6_2.2.2.tar.gz
 $BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR sourcetools 0.1.6 sourcetools_0.1.6.tar.gz
 $BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR shiny 1.0.4 shiny_1.0.4.tar.gz
-fakechroot fakeroot chroot $CHROOT_DIR sh /fakeroot_install_shiny_to_R.sh
+fakechroot fakeroot chroot $CHROOT_DIR sh /fakeroot_install_shiny_to_R.sh 2>&1 | indent
 rm -rf $CHROOT_DIR/shiny_packages
 cd $CHROOT_DIR
-env
+
+
 
 topic "Fixing broken symbolic link in fakeroot[2]"
-#fakechroot fakeroot chroot $CHROOT_DIR  /fakeroot_print_broken_link.sh
-sh $CHROOT_DIR/fakeroot_fix_symlink.sh
-#fakechroot fakeroot chroot $CHROOT_DIR  /fakeroot_print_broken_link.sh
+#fakechroot fakeroot chroot $CHROOT_DIR  /fakeroot_print_broken_link.sh 2>&1 | indent
+sh $CHROOT_DIR/fakeroot_fix_symlink.sh 2>&1 | indent
+#fakechroot fakeroot chroot $CHROOT_DIR  /fakeroot_print_broken_link.sh 2>&1 | indent
+
+
+# install application author dependencies from CRAN
+topic "Executing init.r script (online download)"
+# get the init.r file to use
+# it can be init.[rR] or run.R
+if [[ -f "$BUILD_DIR/init.r" ]]; then
+  INIT_FILE="$BUILD_DIR/init.r"
+elif [[ -f "$BUILD_DIR/init.R" ]]; then
+  INIT_FILE="$BUILD_DIR/init.R"
+else
+  # assuming run.R is present
+  unset INIT_FILE
+fi
+
+if [[ ! -z "$INIT_FILE" ]]; then
+  # prepare wrapper script
+  WRAPPER="$CHROOT_DIR/wrapper.R"
+  cp "$BUILDPACK_DIR/bin/R/wrapper.R" $WRAPPER
+
+  # perform insertions
+  #  would have preferred to use sed or awk for this, but it's real tricky with multi-line
+  #  replacements, so using a Ruby program, as Ruby is installed on Heroku by default
+  ruby "$BUILDPACK_DIR/bin/R/util.rb" "$WRAPPER" "$INIT_FILE" "$CHROOT_DIR" "$CRAN_MIRROR"
+
+  # execute the init wrapper
+  # working directory must be /app so that provided packages/scripts can be found
+  fakechroot fakeroot chroot $CHROOT_DIR /fakeroot_run_init_r.sh /wrapper.R   2>&1 | indent
+
+  # determine whether the R script failed
+  if [[ -f "$CHROOT_DIR/r_init_status" ]]; then
+    echo "R successfully installed (with init)" | indent
+  else
+    echo -e "\033[1;31mERROR: R initialize failed while executing \"$INIT_FILE\" you uploaded. Check the log for details.\033[0m" | indent
+    exit 1
+  fi
+
+else
+
+  echo "R successfully installed" | indent
+
+fi
+
+
 
 
 rm -rf $CHROOT_DIR/etc/hosts && cp /etc/hosts $CHROOT_DIR/etc/hosts
