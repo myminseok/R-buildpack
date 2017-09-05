@@ -40,7 +40,6 @@ https://github.com/rstudio/shiny-examples
 # Building the Buildpack
 
 
-
 1. Make sure you have fetched submodules
 
   ```bash
@@ -89,6 +88,24 @@ and run the script. it will deploy buildpack to cloud foundry.
 1. put metainfo to './mainfest.yml' file.
 for editing manifest.yml, refere to https://docs.cloudfoundry.org/buildpacks/custom.html
 you may use script(./bin/R/gen_apt_archives_manifest.sh) to generate meta yml for lots of debs.
+
+
+# caching shiny binary packages
+installing shiny package from sourcecode takes long time for staging 
+```
+install.packages("shiny", repos='http://cran.us.r-project.org')
+```
+
+build binary package in R environment first, 
+```
+$ wget http://cran.us.r-project.org/src/contrib/shiny_1.0.5.tar.gz
+# R installed environment in ubuntu
+$ R CMD INSTALL --build ./shiny_1.0.5.tar.gz
+```
+above command will generate binary package. then cache the binary to buildpack under 'apt-archives' or public uri.
+```
+$ R CMD INSTALL ./shiny_1.0.5_R_x86_64-pc-linux-gnu.tar.gz
+```
 
 
 # Refer to 

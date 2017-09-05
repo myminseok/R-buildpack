@@ -52,7 +52,6 @@ APT_OPTIONS="-o debug::nolocking=true -o dir::cache=$APT_CACHE_DIR -o dir::state
 
 
 
-
 topic "Setting up R environment"  # fakeroot
 mkdir -p $CHROOT_DIR/.profile.d
 mkdir -p "$APT_CACHE_DIR/archives/partial"
@@ -123,16 +122,16 @@ cp /etc/ld.so.cache $CHROOT_DIR/etc/ld.so.cache
 
 
 # topic "Installing fakechroot apts from buildpack "
-$BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR libfakechroot_2.17.2-1_amd64.deb 1 libfakechroot_2.17.2-1_amd64.deb
-$BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR fakechroot_2.17.2-1_all.deb 1 fakechroot_2.17.2-1_all.deb
-$BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR libc6-dev_2.19-0ubuntu6.13_amd64.deb 1 libc6-dev_2.19-0ubuntu6.13_amd64.deb
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR libfakechroot_2.17.2-1_amd64.deb 1 libfakechroot_2.17.2-1_amd64.deb
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR fakechroot_2.17.2-1_all.deb 1 fakechroot_2.17.2-1_all.deb
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR libc6-dev_2.19-0ubuntu6.13_amd64.deb 1 libc6-dev_2.19-0ubuntu6.13_amd64.deb
 dpkg -x ./libfakechroot_2.17.2-1_amd64.deb $CHROOT_DIR/
 dpkg -x ./fakechroot_2.17.2-1_all.deb $CHROOT_DIR/
 dpkg -x ./libc6-dev_2.19-0ubuntu6.13_amd64.deb $CHROOT_DIR/
 
 
 
-topic "Validating R environment"
+##topic "Validating R environment"
 #fakechroot fakeroot chroot $CHROOT_DIR apt-get update
 # check dpkg environment.
 fakechroot fakeroot chroot $CHROOT_DIR dpkg --configure -a
@@ -187,16 +186,16 @@ sh $CHROOT_DIR/fakeroot_fix_symlink.sh 2>&1 | indent
 topic "Install shiny packages into R (offline from buildpack)"
 mkdir -p $CHROOT_DIR/shiny_packages
 cd $CHROOT_DIR/shiny_packages
-$BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR Rcpp 0.12.12 Rcpp_0.12.12.tar.gz
-$BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR httpvu 1.3.5 httpuv_1.3.5.tar.gz
-$BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR mime 0.5 mime_0.5.tar.gz
-$BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR jsonlite 1.5 jsonlite_1.5.tar.gz
-$BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR xtable 1.8 xtable_1.8-2.tar.gz
-$BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR digest 0.6.12 digest_0.6.12.tar.gz
-$BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR htmltools 0.3.6 htmltools_0.3.6.tar.gz
-$BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR R6 2.2.2 R6_2.2.2.tar.gz
-$BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR sourcetools 0.1.6 sourcetools_0.1.6.tar.gz
-$BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR shiny 1.0.5 shiny_1.0.5.tar.gz
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR Rcpp 0.12.12 Rcpp_0.12.12.tar.gz
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR httpvu 1.3.5 httpuv_1.3.5.tar.gz
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR mime 0.5 mime_0.5.tar.gz
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR jsonlite 1.5 jsonlite_1.5.tar.gz
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR xtable 1.8 xtable_1.8-2.tar.gz
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR digest 0.6.12 digest_0.6.12.tar.gz
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR htmltools 0.3.6 htmltools_0.3.6.tar.gz
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR R6 2.2.2 R6_2.2.2.tar.gz
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR sourcetools 0.1.6 sourcetools_0.1.6.tar.gz
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR shiny 1.0.5 shiny_1.0.5.tar.gz
 fakechroot fakeroot chroot $CHROOT_DIR sh /fakeroot_install_shiny_to_R.sh 2>&1 | indent
 rm -rf $CHROOT_DIR/shiny_packages
 cd $CHROOT_DIR
@@ -253,8 +252,8 @@ fi
 ##topic "Install RStudio-server(under dev)"
 #mkdir -p $CHROOT_DIR/rstudio_packages
 #cd $CHROOT_DIR/rstudio_packages
-#$BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR libapparmor1 2.8.95 libapparmor1_2.8.95~2430-0ubuntu5_amd64.deb
-#$BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR rstudio-server 1.0.153 rstudio-server-1.0.153-amd64.deb
+#$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR libapparmor1 2.8.95 libapparmor1_2.8.95~2430-0ubuntu5_amd64.deb
+#$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR rstudio-server 1.0.153 rstudio-server-1.0.153-amd64.deb
 
 #fakechroot fakeroot chroot $CHROOT_DIR  /fakeroot_install_RStudio.sh
 #rm -rf $CHROOT_DIR/rstudio_packages

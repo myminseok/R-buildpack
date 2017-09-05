@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
-require 'pathname'
+require 'yaml'
 
-release = Pathname.new(ARGV.first).join("tmp/ruby-buildpack-release-step.yml")
-puts release.read if release.exist?
+release_run_command = {}
+#release_run_command['default_process_types'] = {'web' =>'cargo run'}
+puts release_run_command.to_yaml

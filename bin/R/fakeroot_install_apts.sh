@@ -13,6 +13,7 @@ for DEB in $(ls -1 $APT_DIR/*.deb); do
     echo -n "."
     dpkg -x $DEB /
 done
-echo "* DONE"
+echo ""
+echo "DONE"
 ## to exit from fakechroot
 exit
