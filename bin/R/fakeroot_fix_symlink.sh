@@ -1,4 +1,5 @@
 #!/bin/bash
+## to Fix broken symbolic link in root
 ## should run outside of fakeroot. (not in fakechroot env)
 
 rm_symlink() {
@@ -7,7 +8,7 @@ rm_symlink() {
   fi
 }
 
-echo "Start to Fix broken symbolic link in fakeroot"
+echo "Start to Fix broken symbolic link"
 export CHROOT_DIR="/home/vcap/app"
 
 

@@ -50,7 +50,10 @@ export PKG_CONFIG_PATH="$CHROOT_DIR/usr/lib/x86_64-linux-gnu/pkgconfig:$CHROOT_D
 
 APT_OPTIONS="-o debug::nolocking=true -o dir::cache=$APT_CACHE_DIR -o dir::state=$APT_STATE_DIR"
 
-topic "Setting up fakechroot"
+
+
+
+topic "Setting up R environment"  # fakeroot
 mkdir -p $CHROOT_DIR/.profile.d
 mkdir -p "$APT_CACHE_DIR/archives/partial"
 mkdir -p "$APT_STATE_DIR/lists/partial"
@@ -86,13 +89,15 @@ mkdir -p $CHROOT_DIR/usr/lib && cp -R /usr/lib/perl*  $CHROOT_DIR/usr/lib/
 mkdir -p $CHROOT_DIR/var/lib/dpkg
 mkdir -p $CHROOT_DIR/src/contrib/  # for some source compile packages in R. (ggplot2)
 
+
+## copy fundamental system, libs to fakeroot.
 export PRUNE_EXPR="-path /root -o -path /tmp -o -path /proc -o -path /sys -o -path /lost+found -o -path /etc/ssl/private -o -path /var/spool -o -path /var/cache -o -path /var/log"
-find / \( $PRUNE_EXPR \) -prune -o -print | grep python | grep -v lock | grep -v Lock > list_python && cat list_python | cpio -p -dum $CHROOT_DIR 
-find / \( $PRUNE_EXPR \) -prune -o -print | grep apt    | grep -v lock | grep -v Lock > list_apt && cat list_apt | cpio -p -dum $CHROOT_DIR 
-find / \( $PRUNE_EXPR \) -prune -o -print | grep dpkg   | grep -v lock | grep -v Lock > list_dpkg && cat list_dpkg | cpio -p -dum $CHROOT_DIR 
-find / \( $PRUNE_EXPR \) -prune -o -print | grep debconf| grep -v lock | grep -v Lock > list_debconf && cat list_debconf | cpio -p -dum $CHROOT_DIR 
-find / \( $PRUNE_EXPR \) -prune -o -print | grep pam| grep -v lock | grep -v Lock > list_pam && cat list_pam | cpio -p -dum $CHROOT_DIR 
-find / \( $PRUNE_EXPR \) -prune -o -print | grep insserv| grep -v lock | grep -v Lock > list_insserv && cat list_insserv | cpio -p -dum $CHROOT_DIR 
+find / \( $PRUNE_EXPR \) -prune -o -print | grep python | grep -v lock | grep -v Lock > list_python && cat list_python | cpio -p -dum $CHROOT_DIR  2>&1 >/dev/null
+find / \( $PRUNE_EXPR \) -prune -o -print | grep apt    | grep -v lock | grep -v Lock > list_apt && cat list_apt | cpio -p -dum $CHROOT_DIR  2>&1 >/dev/null
+find / \( $PRUNE_EXPR \) -prune -o -print | grep dpkg   | grep -v lock | grep -v Lock > list_dpkg && cat list_dpkg | cpio -p -dum $CHROOT_DIR  2>&1 >/dev/null
+find / \( $PRUNE_EXPR \) -prune -o -print | grep debconf| grep -v lock | grep -v Lock > list_debconf && cat list_debconf | cpio -p -dum $CHROOT_DIR  2>&1 >/dev/null
+find / \( $PRUNE_EXPR \) -prune -o -print | grep pam| grep -v lock | grep -v Lock > list_pam && cat list_pam | cpio -p -dum $CHROOT_DIR  2>&1 >/dev/null
+find / \( $PRUNE_EXPR \) -prune -o -print | grep insserv| grep -v lock | grep -v Lock > list_insserv && cat list_insserv | cpio -p -dum $CHROOT_DIR  2>&1 >/dev/null
 
 mkdir -p $CHROOT_DIR/lib/init && cp -R /lib/init/* $CHROOT_DIR/lib/init
 mkdir -p $CHROOT_DIR/lib/lsb && cp -R /lib/lsb/* $CHROOT_DIR/lib/lsb
@@ -117,7 +122,7 @@ cp /etc/ld.so.cache $CHROOT_DIR/etc/ld.so.cache
 
 
 
-topic "Installing fakechroot apts from buildpack "
+# topic "Installing fakechroot apts from buildpack "
 $BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR libfakechroot_2.17.2-1_amd64.deb 1 libfakechroot_2.17.2-1_amd64.deb
 $BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR fakechroot_2.17.2-1_all.deb 1 fakechroot_2.17.2-1_all.deb
 $BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR libc6-dev_2.19-0ubuntu6.13_amd64.deb 1 libc6-dev_2.19-0ubuntu6.13_amd64.deb
@@ -127,12 +132,12 @@ dpkg -x ./libc6-dev_2.19-0ubuntu6.13_amd64.deb $CHROOT_DIR/
 
 
 
-topic "Checking dpkg environment in fakechroot"
+topic "Validating R environment"
 #fakechroot fakeroot chroot $CHROOT_DIR apt-get update
 # check dpkg environment.
 fakechroot fakeroot chroot $CHROOT_DIR dpkg --configure -a
 
-topic "Installing apts from buildpack into fakechroot"
+topic "Installing apts from buildpack"
 mkdir -p $CHROOT_DIR/apts_from_buildpack && cp $BUILDPACK_DIR/dependencies/*.deb $CHROOT_DIR/apts_from_buildpack
 fakechroot fakeroot chroot $CHROOT_DIR /fakeroot_install_apts.sh /apts_from_buildpack 2>&1 | indent
 rm -rf $CHROOT_DIR/apts_from_buildpack
@@ -140,7 +145,7 @@ rm -rf $CHROOT_DIR/apts_from_buildpack
 
 
 
-topic "Installing apts from Aptfile(online download)"
+topic "Installing apts from Aptfile(online downloading)"
 if [ -s $BUILD_DIR/Aptfile ]; then
 
   mkdir -p $CHROOT_DIR/apts_from_aptfile/archives
@@ -171,7 +176,7 @@ else
 fi
 
 
-topic "Fixing broken symbolic link in fakeroot[1]"
+##topic "Fixing broken symbolic link[1]"
 #fakechroot fakeroot chroot $CHROOT_DIR  /fakeroot_print_broken_link.sh 2>&1 | indent
 sh $CHROOT_DIR/fakeroot_fix_symlink.sh 2>&1 | indent
 #fakechroot fakeroot chroot $CHROOT_DIR  /fakeroot_print_broken_link.sh 2>&1 | indent
@@ -198,14 +203,14 @@ cd $CHROOT_DIR
 
 
 
-topic "Fixing broken symbolic link in fakeroot[2]"
+#topic "Fixing broken symbolic link in fakeroot[2]"
 #fakechroot fakeroot chroot $CHROOT_DIR  /fakeroot_print_broken_link.sh 2>&1 | indent
 sh $CHROOT_DIR/fakeroot_fix_symlink.sh 2>&1 | indent
 #fakechroot fakeroot chroot $CHROOT_DIR  /fakeroot_print_broken_link.sh 2>&1 | indent
 
 
 # install application author dependencies from CRAN
-topic "Executing init.r script (online download)"
+topic "R initialize: Executing init.r script (online downloading dependencies)"
 # get the init.r file to use
 # it can be init.[rR] or run.R
 if [[ -f "$BUILD_DIR/init.r" ]]; then
@@ -233,37 +238,39 @@ if [[ ! -z "$INIT_FILE" ]]; then
 
   # determine whether the R script failed
   if [[ -f "$CHROOT_DIR/r_init_status" ]]; then
-    echo "R successfully installed (with init)" | indent
+    echo "R initialized successfully" | indent
   else
     echo -e "\033[1;31mERROR: R initialize failed while executing \"$INIT_FILE\" you uploaded. Check the log for details.\033[0m" | indent
     exit 1
   fi
 
 else
-
-  echo "R successfully installed" | indent
-
+  echo "R initialized successfully" | indent
 fi
 
 
 
+##topic "Install RStudio-server(under dev)"
+#mkdir -p $CHROOT_DIR/rstudio_packages
+#cd $CHROOT_DIR/rstudio_packages
+#$BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR libapparmor1 2.8.95 libapparmor1_2.8.95~2430-0ubuntu5_amd64.deb
+#$BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR rstudio-server 1.0.153 rstudio-server-1.0.153-amd64.deb
 
+#fakechroot fakeroot chroot $CHROOT_DIR  /fakeroot_install_RStudio.sh
+#rm -rf $CHROOT_DIR/rstudio_packages
+
+
+
+
+topic "Finalizing staged image"
+## copy system files to fakeroot.
 rm -rf $CHROOT_DIR/etc/hosts && cp /etc/hosts $CHROOT_DIR/etc/hosts
 rm -rf $CHROOT_DIR/etc/ld.so.conf && cp /etc/ld.so.conf $CHROOT_DIR/etc/ld.so.conf
 rm -rf $CHROOT_DIR/etc/ld.so.cache && cp /etc/ld.so.conf $CHROOT_DIR/etc/ld.so.cache
 
 
 
-#topic "Install RStudio-server(under dev)"
-mkdir -p $CHROOT_DIR/rstudio_packages
-cd $CHROOT_DIR/rstudio_packages
-$BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR libapparmor1 2.8.95 libapparmor1_2.8.95~2430-0ubuntu5_amd64.deb
-$BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR rstudio-server 1.0.153 rstudio-server-1.0.153-amd64.deb
 
-#fakechroot fakeroot chroot $CHROOT_DIR  /fakeroot_install_RStudio.sh
-#rm -rf $CHROOT_DIR/rstudio_packages
-
-topic "Finilizing staging"
 # TODO: create wrapper.
 #cat <<EOF >$CHROOT_DIR/R_setup.sh
 ##!/bin/bash
@@ -278,7 +285,7 @@ topic "Finilizing staging"
 #export | grep -E -e ' (PATH|LD_LIBRARY_PATH|LIBRARY_PATH|INCLUDE_PATH|CPATH|CPPPATH|PKG_CONFIG_PATH)='  > "$LP_DIR/export"
 
 
-topic "moving  $CHROOT_DIR/*  => $BUILD_DIR "
+## topic "moving  $CHROOT_DIR/*  => $BUILD_DIR "
 cp -r $BUILD_DIR/* $CHROOT_DIR/
 rm -rf $BUILD_DIR/*
 mv $CHROOT_DIR/*  $BUILD_DIR
