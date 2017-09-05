@@ -214,62 +214,72 @@ dependencies:
 
 - name: httpvu
   version: 1.3.5
-  uri: http://cran.us.r-project.org/src/contrib/httpuv_1.3.5.tar.gz
-  md5: 48d894ff0067148f41a651634fbb2012
+#  uri: http://cran.us.r-project.org/src/contrib/httpuv_1.3.5.tar.gz
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/shiny-binaries/httpuv_1.3.5_R_x86_64-pc-linux-gnu.tar.gz
+  md5: 1a2ca04b8e12d1b94d9c1b3b4efc7b9d
   cf_stacks:
   - cflinuxfs2
 - name: Rcpp
   version: 0.12.12
-  uri: http://cran.us.r-project.org/src/contrib/Rcpp_0.12.12.tar.gz
-  md5: 97b36a3b567e3438067c4a7d0075fd90
+#  uri: http://cran.us.r-project.org/src/contrib/Rcpp_0.12.12.tar.gz
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/shiny-binaries/Rcpp_0.12.12_R_x86_64-pc-linux-gnu.tar.gz
+  md5: d56c50ae175613ec6e33979f0338ddb8
   cf_stacks:
   - cflinuxfs2
 - name: mime
   version: 0.5
-  uri: http://cran.us.r-project.org/src/contrib/mime_0.5.tar.gz
-  md5: 87e00b6d57b581465c19ae869a723c4d
+#  uri: http://cran.us.r-project.org/src/contrib/mime_0.5.tar.gz
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/shiny-binaries/mime_0.5_R_x86_64-pc-linux-gnu.tar.gz
+  md5: 241e09777d7830d32b2aafe28b8fc8bc
   cf_stacks:
   - cflinuxfs2
 - name: jsonlite
   version: 1.5
-  uri: http://cran.us.r-project.org/src/contrib/jsonlite_1.5.tar.gz
-  md5: 2a81c261a702fccbbd5d2b32df108f76
+#  uri: http://cran.us.r-project.org/src/contrib/jsonlite_1.5.tar.gz
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/shiny-binaries/jsonlite_1.5_R_x86_64-pc-linux-gnu.tar.gz
+  md5: c313e6d8575581bff0630dfb37144ef5
   cf_stacks:
   - cflinuxfs2
 - name: xtable
   version: 1.8
-  uri: http://cran.us.r-project.org/src/contrib/xtable_1.8-2.tar.gz
-  md5: 239e4825cd046156a67efae3aac01d86
+#  uri: http://cran.us.r-project.org/src/contrib/xtable_1.8-2.tar.gz
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/shiny-binaries/xtable_1.8-2_R_x86_64-pc-linux-gnu.tar.gz
+  md5: d9dd2313fb4578c2d968aa39ad88456e
   cf_stacks:
   - cflinuxfs2
 - name: digest
   version: 0.6.12
-  uri: http://cran.us.r-project.org/src/contrib/digest_0.6.12.tar.gz
-  md5: 738efd4d9a37c5a4001ae66e954ce07e
+#  uri: http://cran.us.r-project.org/src/contrib/digest_0.6.12.tar.gz
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/shiny-binaries/digest_0.6.12_R_x86_64-pc-linux-gnu.tar.gz
+  md5: b87eb62932b0ced3ce39bfc71924f15d
   cf_stacks:
   - cflinuxfs2
 - name: htmltools
   version: 0.3.6
-  uri: http://cran.us.r-project.org/src/contrib/htmltools_0.3.6.tar.gz
-  md5: 336419c2143f958862e01ef1bbc9c253
+#  uri: http://cran.us.r-project.org/src/contrib/htmltools_0.3.6.tar.gz
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/shiny-binaries/htmltools_0.3.6_R_x86_64-pc-linux-gnu.tar.gz
+  md5: baf4b5923b060e977a6a31f5d2d1b7df
   cf_stacks:
   - cflinuxfs2
 - name: R6
   version: 2.2.2
-  uri: http://cran.us.r-project.org/src/contrib/R6_2.2.2.tar.gz
-  md5: 635b58c65bff624a1fab69c6b1989801
+#  uri: http://cran.us.r-project.org/src/contrib/R6_2.2.2.tar.gz
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/shiny-binaries/R6_2.2.2_R_x86_64-pc-linux-gnu.tar.gz
+  md5: 3d8dbc0e747caebf3a7c13674cbb92d6
   cf_stacks:
   - cflinuxfs2
 - name: sourcetools
   version: 0.1.6
-  uri: http://cran.us.r-project.org/src/contrib/sourcetools_0.1.6.tar.gz
-  md5: c78a816384b168d04af41bd7ff4d909d
+#  uri: http://cran.us.r-project.org/src/contrib/sourcetools_0.1.6.tar.gz
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/shiny-binaries/sourcetools_0.1.6_R_x86_64-pc-linux-gnu.tar.gz
+  md5: 7a536f531498b4f5c6118fd5af0da64c
   cf_stacks:
   - cflinuxfs2
 - name: shiny
-  version: 1.0.4
-  uri: http://cran.us.r-project.org/src/contrib/shiny_1.0.4.tar.gz
-  md5: 6373ea61ed2d666e3ab5dca18e6e90f0
+  version: 1.0.5
+#  uri: http://cran.us.r-project.org/src/contrib/shiny_1.0.5.tar.gz
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/shiny-binaries/shiny_1.0.5_R_x86_64-pc-linux-gnu.tar.gz
+  md5: 4262e25ce87646160807f62d3b50517f
   cf_stacks:
   - cflinuxfs2
 

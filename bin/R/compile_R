@@ -191,7 +191,7 @@ $BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR digest 0.6.12 digest_0.6.1
 $BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR htmltools 0.3.6 htmltools_0.3.6.tar.gz
 $BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR R6 2.2.2 R6_2.2.2.tar.gz
 $BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR sourcetools 0.1.6 sourcetools_0.1.6.tar.gz
-$BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR shiny 1.0.4 shiny_1.0.4.tar.gz
+$BUILDPACK_DIR/bin/download_dependency $BUILDPACK_DIR shiny 1.0.5 shiny_1.0.5.tar.gz
 fakechroot fakeroot chroot $CHROOT_DIR sh /fakeroot_install_shiny_to_R.sh 2>&1 | indent
 rm -rf $CHROOT_DIR/shiny_packages
 cd $CHROOT_DIR
