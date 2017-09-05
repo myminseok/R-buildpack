@@ -157,7 +157,7 @@ dependencies:
 
 
 
-
+## fakechroot related
 - name: fakechroot_2.17.2-1_all.deb
   version: 1
   uri: file:///Users/kimm5/_dev/ruby-buildpack/apt-archives/fakechroot_2.17.2-1_all.deb
@@ -182,6 +182,7 @@ dependencies:
   md5: 622df6b43c28072fd1a47ed7fcbd28f2
   cf_stacks:
   - cflinuxfs2
+
 - name: libapparmor1
   version: 2.8.95
   uri: http://archive.ubuntu.com/ubuntu/pool/main/a/apparmor/libapparmor1_2.8.95~2430-0ubuntu5_amd64.deb
@@ -194,6 +195,15 @@ dependencies:
   md5: a86b3eef2068afba7bb84dd831f4d209
   cf_stacks:
   - cflinuxfs2
+  
+## Pango-WARNING **: failed to choose a font, expect ugly output. engine-type='PangoRenderFc', script='latin'
+- name: fonts-dejavu-core
+  version: 2.34
+#  uri: http://kr.archive.ubuntu.com/ubuntu/pool/main/f/fonts-dejavu/fonts-dejavu-core_2.34-1ubuntu1_all.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/fonts-dejavu-core_2.34-1ubuntu1_all.deb
+  md5: 7167c133d8ec713c90fc64faab927994
+  cf_stacks:
+  - cflinuxfs2 
 - name: gdebi-core
   version: 0.9.5.3
   uri: http://archive.ubuntu.com/ubuntu/pool/main/g/gdebi/gdebi-core_0.9.5.3_all.deb
@@ -209,8 +219,7 @@ dependencies:
 
 
 
-
-
+## shiny packges for R
 
 - name: httpvu
   version: 1.3.5
