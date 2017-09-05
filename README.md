@@ -85,7 +85,7 @@ and run the script. it will deploy buildpack to cloud foundry.
 # Caching apt, deb, zip file to buildpack.
 
 1. download to './apt-archives' directory
-1. put metainfo to './mainfest.yml' file.
+1. put meta info to './mainfest.yml' file. using uri: http, or uri: file:///
 for editing manifest.yml, refere to https://docs.cloudfoundry.org/buildpacks/custom.html
 you may use script(./bin/R/gen_apt_archives_manifest.sh) to generate meta yml for lots of debs.
 
