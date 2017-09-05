@@ -182,6 +182,17 @@ dependencies:
   md5: 622df6b43c28072fd1a47ed7fcbd28f2
   cf_stacks:
   - cflinuxfs2
+  
+## Pango-WARNING **: failed to choose a font, expect ugly output. engine-type='PangoRenderFc', script='latin'
+- name: fonts-dejavu-core
+  version: 2.34
+#  uri: http://kr.archive.ubuntu.com/ubuntu/pool/main/f/fonts-dejavu/fonts-dejavu-core_2.34-1ubuntu1_all.deb
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/fonts-dejavu-core_2.34-1ubuntu1_all.deb
+  md5: 7167c133d8ec713c90fc64faab927994
+  cf_stacks:
+  - cflinuxfs2
+
+
 
 - name: libapparmor1
   version: 2.8.95
@@ -193,15 +204,6 @@ dependencies:
   version: 1.4.16
   uri: http://archive.ubuntu.com/ubuntu/pool/universe/g/gnupg/gnupg-curl_1.4.16-1ubuntu2_amd64.deb
   md5: a86b3eef2068afba7bb84dd831f4d209
-  cf_stacks:
-  - cflinuxfs2
-  
-## Pango-WARNING **: failed to choose a font, expect ugly output. engine-type='PangoRenderFc', script='latin'
-- name: fonts-dejavu-core
-  version: 2.34
-#  uri: http://kr.archive.ubuntu.com/ubuntu/pool/main/f/fonts-dejavu/fonts-dejavu-core_2.34-1ubuntu1_all.deb
-  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/fonts-dejavu-core_2.34-1ubuntu1_all.deb
-  md5: 7167c133d8ec713c90fc64faab927994
   cf_stacks:
   - cflinuxfs2 
 - name: gdebi-core

@@ -249,18 +249,6 @@ fi
 
 
 
-##topic "Install RStudio-server(under dev)"
-#mkdir -p $CHROOT_DIR/rstudio_packages
-#cd $CHROOT_DIR/rstudio_packages
-#$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR libapparmor1 2.8.95 libapparmor1_2.8.95~2430-0ubuntu5_amd64.deb
-#$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR rstudio-server 1.0.153 rstudio-server-1.0.153-amd64.deb
-
-#fakechroot fakeroot chroot $CHROOT_DIR  /fakeroot_install_RStudio.sh
-#rm -rf $CHROOT_DIR/rstudio_packages
-
-
-
-
 topic "Finalizing staged image"
 ## copy system files to fakeroot.
 rm -rf $CHROOT_DIR/etc/hosts && cp /etc/hosts $CHROOT_DIR/etc/hosts
