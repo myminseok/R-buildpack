@@ -8,7 +8,7 @@ rm_symlink() {
   fi
 }
 
-echo "Start to Fix broken symbolic link"
+#echo "Start to Fix broken symbolic link"
 export CHROOT_DIR="/home/vcap/app"
 
 

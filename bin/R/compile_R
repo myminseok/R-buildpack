@@ -91,12 +91,12 @@ mkdir -p $CHROOT_DIR/src/contrib/  # for some source compile packages in R. (ggp
 
 ## copy fundamental system, libs to fakeroot.
 export PRUNE_EXPR="-path /root -o -path /tmp -o -path /proc -o -path /sys -o -path /lost+found -o -path /etc/ssl/private -o -path /var/spool -o -path /var/cache -o -path /var/log"
-find / \( $PRUNE_EXPR \) -prune -o -print | grep python | grep -v lock | grep -v Lock > list_python && cat list_python | cpio -p -dum $CHROOT_DIR  2>&1 >/dev/null
-find / \( $PRUNE_EXPR \) -prune -o -print | grep apt    | grep -v lock | grep -v Lock > list_apt && cat list_apt | cpio -p -dum $CHROOT_DIR  2>&1 >/dev/null
-find / \( $PRUNE_EXPR \) -prune -o -print | grep dpkg   | grep -v lock | grep -v Lock > list_dpkg && cat list_dpkg | cpio -p -dum $CHROOT_DIR  2>&1 >/dev/null
-find / \( $PRUNE_EXPR \) -prune -o -print | grep debconf| grep -v lock | grep -v Lock > list_debconf && cat list_debconf | cpio -p -dum $CHROOT_DIR  2>&1 >/dev/null
-find / \( $PRUNE_EXPR \) -prune -o -print | grep pam| grep -v lock | grep -v Lock > list_pam && cat list_pam | cpio -p -dum $CHROOT_DIR  2>&1 >/dev/null
-find / \( $PRUNE_EXPR \) -prune -o -print | grep insserv| grep -v lock | grep -v Lock > list_insserv && cat list_insserv | cpio -p -dum $CHROOT_DIR  2>&1 >/dev/null
+find / \( $PRUNE_EXPR \) -prune -o -print | grep python | grep -v lock | grep -v Lock > list_python && cat list_python | cpio -p -dum $CHROOT_DIR  > /dev/null 2>&1
+find / \( $PRUNE_EXPR \) -prune -o -print | grep apt    | grep -v lock | grep -v Lock > list_apt && cat list_apt | cpio -p -dum $CHROOT_DIR   > /dev/null 2>&1
+find / \( $PRUNE_EXPR \) -prune -o -print | grep dpkg   | grep -v lock | grep -v Lock > list_dpkg && cat list_dpkg | cpio -p -dum $CHROOT_DIR   > /dev/null 2>&1
+find / \( $PRUNE_EXPR \) -prune -o -print | grep debconf| grep -v lock | grep -v Lock > list_debconf && cat list_debconf | cpio -p -dum $CHROOT_DIR > /dev/null 2>&1
+find / \( $PRUNE_EXPR \) -prune -o -print | grep pam| grep -v lock | grep -v Lock > list_pam && cat list_pam | cpio -p -dum $CHROOT_DIR > /dev/null 2>&1
+find / \( $PRUNE_EXPR \) -prune -o -print | grep insserv| grep -v lock | grep -v Lock > list_insserv && cat list_insserv | cpio -p -dum $CHROOT_DIR > /dev/null 2>&1
 
 mkdir -p $CHROOT_DIR/lib/init && cp -R /lib/init/* $CHROOT_DIR/lib/init
 mkdir -p $CHROOT_DIR/lib/lsb && cp -R /lib/lsb/* $CHROOT_DIR/lib/lsb
