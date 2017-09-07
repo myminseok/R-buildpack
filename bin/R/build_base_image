@@ -1,0 +1,196 @@
+#!/usr/bin/env bash
+# bin/compile <build-dir> <cache-dir>
+
+# fail fast
+set -e
+
+# debug
+# set -x
+
+# parse and derive params
+BUILD_DIR=$1
+CACHE_DIR=$2
+LP_DIR=`cd $(dirname $0); cd ..; pwd`
+
+function error() {
+  echo " !     $*" >&2
+  exit 1
+}
+
+function topic() {
+  echo "-----> $*"
+}
+
+function indent() {
+  c='s/^/       /'
+  case $(uname) in
+    Darwin) sed -l "$c";;
+    *)      sed -u "$c";;
+  esac
+}
+
+
+
+### BUILD_DIR     /tmp/app
+### BUILDPACK_DIR /tmp/buildpacks/7e3717441352283936abc3b1f6772b1b
+###               /tmp/buildpacks/7e3717441352283936abc3b1f6772b1b/dependencies/*.deb
+### CACHE_DIR     /tmp/cache
+### APT_CACHE_DIR /tmp/cache/apt/cache/archives/
+APT_CACHE_DIR="$CACHE_DIR/apt/cache"
+APT_STATE_DIR="$CACHE_DIR/apt/state"
+CHROOT_DIR="/home/vcap/app"
+#CRAN_MIRROR="http://cran.nexr.com"
+CRAN_MIRROR="http://cran.ism.ac.jp"
+
+
+# env for staging.
+export PATH="$CHROOT_DIR/usr/bin:$CHROOT_DIR/usr/sbin:$CHROOT_DIR/usr/lib/rstudio-server:/sbin:/usr/sbin:$PATH"
+#export LD_LIBRARY_PATH="$CHROOT_DIR/lib/x86_64-linux-gnu/:$CHROOT_DIR/usr/lib/x86_64-linux-gnu:$CHROOT_DIR/usr/lib/i386-linux-gnu:$CHROOT_DIR/usr/lib:$LD_LIBRARY_PATH"
+#export LD_LIBRARY_PATH="$CHROOT_DIR/usr/lib/x86_64-linux-gnu/fakechroot:$LD_LIBRARY_PATH"
+#export LIBRARY_PATH="$CHROOT_DIR/lib/x86_64-linux-gnu/:$CHROOT_DIR/usr/lib/x86_64-linux-gnu:$CHROOT_DIR/usr/lib/i386-linux-gnu:$CHROOT_DIR/usr/lib:$LIBRARY_PATH"
+#export INCLUDE_PATH="$CHROOT_DIR/usr/include:$INCLUDE_PATH"
+#export CPATH="$INCLUDE_PATH"
+#export CPPPATH="$INCLUDE_PATH"
+#export PKG_CONFIG_PATH="$CHROOT_DIR/usr/lib/x86_64-linux-gnu/pkgconfig:$CHROOT_DIR/usr/lib/i386-linux-gnu/pkgconfig:$CHROOT_DIR/usr/lib/pkgconfig:$PKG_CONFIG_PATH"
+
+
+APT_OPTIONS="-o debug::nolocking=true -o dir::cache=$APT_CACHE_DIR -o dir::state=$APT_STATE_DIR"
+
+
+
+topic "Setting up basic runtime image"  # fakeroot
+
+
+mkdir -p $CHROOT_DIR/.profile.d
+mkdir -p "$APT_CACHE_DIR/archives/partial"
+mkdir -p "$APT_STATE_DIR/lists/partial"
+mkdir -p $CHROOT_DIR/apts_from_buildpack
+
+
+cp $BUILDPACK_DIR/bin/R/*.sh $CHROOT_DIR/
+cp $BUILDPACK_DIR/bin/R/r_environment.sh $CHROOT_DIR/.profile.d/r_environment.sh 
+cp $BUILDPACK_DIR/bin/R/testmap.cpp $CHROOT_DIR/testmap.cpp
+cp $BUILDPACK_DIR/bin/R/uname $CHROOT_DIR/uname
+chmod 777 $CHROOT_DIR/*.sh
+
+
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR libc6-dev_2.19-0ubuntu6_amd64.deb 1 $CHROOT_DIR/apts_from_buildpack/libc6-dev_2.19-0ubuntu6_amd64.deb
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR libfakechroot_2.17.2-1_amd64.deb 1 $CHROOT_DIR/apts_from_buildpack/libfakechroot_2.17.2-1_amd64.deb
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR fakechroot_2.17.2-1_all.deb 1 $CHROOT_DIR/apts_from_buildpack/fakechroot_2.17.2-1_all.deb
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR debootstrap 1.0.59 $CHROOT_DIR/apts_from_buildpack/debootstrap_1.0.59_all.deb
+#dpkg -A -R $CHROOT_DIR/apts_from_buildpack/
+dpkg -x $CHROOT_DIR/apts_from_buildpack/libc6-dev_2.19-0ubuntu6_amd64.deb $CHROOT_DIR
+dpkg -x $CHROOT_DIR/apts_from_buildpack/libfakechroot_2.17.2-1_amd64.deb $CHROOT_DIR
+dpkg -x $CHROOT_DIR/apts_from_buildpack/fakechroot_2.17.2-1_all.deb $CHROOT_DIR
+dpkg -x $CHROOT_DIR/apts_from_buildpack/debootstrap_1.0.59_all.deb $CHROOT_DIR
+
+
+
+# [TODO] to skip configuring makdev error while debootstrap
+## Setting up makedev (2.3.1-93ubuntu1) ...
+## mknod: ‘mem-’: Permission denied
+## makedev mem c 1 1 root kmem 0640: failed
+## /sbin/MAKEDEV: don't know how to make device "tty0"
+PATH=$CHROOT_DIR:$PATH && echo "uname: $(uname -s)"
+source $CHROOT_DIR/.profile.d/r_environment.sh 
+DEBOOTSTRAP_DIR=/home/vcap/app/usr/share/debootstrap
+#fakechroot fakeroot debootstrap --variant=fakechroot trusty $CHROOT_DIR/
+
+
+
+### [TODO] it is just to build faster....
+cd /home/vcap
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR home_vcap_app_fakechroot 1 home_vcap_app_fakechroot.tar.gz
+tar xf home_vcap_app_fakechroot.tar.gz  > /dev/null 2>&1 
+rm home_vcap_app_fakechroot.tar.gz
+
+
+
+
+## to skip makedev inside of fakechroot 
+mv $CHROOT_DIR/var/lib/dpkg/info/makedev.postinst $CHROOT_DIR/var/lib/dpkg/info/makedev.postinst.orig
+cp $BUILDPACK_DIR/bin/R/makedev.postinst $CHROOT_DIR/var/lib/dpkg/info/makedev.postinst
+chmod 655 $CHROOT_DIR/var/lib/dpkg/info/makedev.postinst
+
+
+
+topic "Validating apt-get environment"
+fakechroot fakeroot chroot $CHROOT_DIR dpkg --configure -a
+fakechroot fakeroot chroot $CHROOT_DIR apt-get update
+fakechroot fakeroot chroot $CHROOT_DIR apt-get install -f
+
+
+
+## reinstall libc6
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR libc6-dev_2.19-0ubuntu6_amd64.deb 1 $CHROOT_DIR/apts_from_buildpack/libc6-dev_2.19-0ubuntu6_amd64.deb
+fakechroot fakeroot chroot $CHROOT_DIR /fakeroot_install_apts.sh /apts_from_buildpack 2>&1 | indent
+rm -rf $CHROOT_DIR/apts_from_buildpack
+##$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR libc6-dev_2.19-0ubuntu6_amd64.deb 1 $CHROOT_DIR/apts_from_buildpack/libc6-dev_2.19-0ubuntu6_amd64.deb
+##fakechroot fakeroot chroot $CHROOT_DIR  dpkg -i /apts_from_buildpack/libc6-dev_2.19-0ubuntu6_amd64.deb
+##fakechroot fakeroot chroot $CHROOT_DIR apt-get install -fy
+
+
+
+
+topic "install g++ (online)"
+fakechroot fakeroot chroot $CHROOT_DIR apt-get install -y g++
+topic "g++ test "
+fakechroot fakeroot chroot $CHROOT_DIR sh /fakeroot_testmap.sh
+
+
+
+topic "Installing R CRAN key (online)"
+echo "deb $CRAN_MIRROR/bin/linux/ubuntu trusty/" >> $CHROOT_DIR/etc/apt/sources.list
+cat $CHROOT_DIR/etc/apt/sources.list
+fakechroot fakeroot chroot $CHROOT_DIR apt-key adv --keyserver  keyserver.ubuntu.com --recv-keys 51716619E084DAB9
+fakechroot fakeroot chroot $CHROOT_DIR apt-get update
+
+
+topic "Installing R apts from buildpack"
+## r-base from CRAN
+## libcurl4-openssl-dev for ggplot2
+## libcairo2-dev or ggplot2
+mkdir -p $CHROOT_DIR/apts_from_buildpack && cp $BUILDPACK_DIR/dependencies/*.deb $CHROOT_DIR/apts_from_buildpack
+fakechroot fakeroot chroot $CHROOT_DIR /fakeroot_install_apts.sh /apts_from_buildpack 2>&1 | indent
+rm -rf $CHROOT_DIR/apts_from_buildpack
+
+
+topic "Validating apt-get environment(final)"
+fakechroot fakeroot chroot $CHROOT_DIR dpkg --configure -a
+fakechroot fakeroot chroot $CHROOT_DIR apt-get update
+fakechroot fakeroot chroot $CHROOT_DIR apt-get install -f
+
+
+topic "Finalizing staged image"
+
+# remove archived apt-files in /var/cache/apt/archives, reducing about 60M
+apt-get clean
+
+echo "archiving /home/vcap/app  into /home/vcap/app/home_vcap_app_fakechroot.tar.gz"
+cd /home/vcap
+$CHROOT_DIR/gen-home-vcap-app-image.sh $CHROOT_DIR
+mv home_vcap_app_fakechroot.tar.gz* $BUILD_DIR
+
+
+echo "[you need to] download the base image from PCF container"
+echo "	mkdir temp && cd ./temp"
+echo "	cf download-droplet build-app ./droplet"
+echo "	tar xf ./droplet"
+echo "	mv  ./app/home_vcap_app_fakechroot.tar.gz* to $abs_path/apt-archives/home-vcap-app-image/"
+echo ""
+echo "[you need to]  merging home_vcap_app file"
+echo "	$abs_path/bin/R/merge-home-vcap-app-image.sh $abs_path/apt-archives/home-vcap-app-image/"
+echo ""
+
+
+
+## topic "moving  $CHROOT_DIR/*  => $BUILD_DIR "
+cp -r $BUILD_DIR/* $CHROOT_DIR/
+rm -rf $BUILD_DIR/*
+mv $CHROOT_DIR/*  $BUILD_DIR
+mkdir -p $BUILD_DIR/.profile.d 
+cp -r $CHROOT_DIR/.profile.d/*  $BUILD_DIR/.profile.d/
+
+topic "Staging completed"
+
+

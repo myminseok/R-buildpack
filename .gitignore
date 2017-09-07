@@ -20,3 +20,5 @@ vendor/bundler/*
 *.so.*
 /.bin/
 *_buildpack-cached-*.zip
+**/**/home_vcap_app_fakechroot-merged.tar.gz
+**/home_vcap_app_fakechroot.tar.gz

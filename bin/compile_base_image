@@ -1,0 +1,13 @@
+#!/bin/bash
+set -euo pipefail
+
+BUILD_DIR=$1
+CACHE_DIR=$2
+
+export BUILDPACK_DIR=`dirname $(readlink -f ${BASH_SOURCE%/*})`
+export DEPS_DIR="$BUILD_DIR/.cloudfoundry"
+
+
+$BUILDPACK_DIR/bin/R/build_base_image "$BUILD_DIR" "$CACHE_DIR"
+
+## cd test/build_base_image &&  cf push

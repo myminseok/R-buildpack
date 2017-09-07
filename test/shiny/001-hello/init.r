@@ -6,7 +6,8 @@
 ###########################################################
 # Update this line with the R packages to install:
 
-my_packages = c("mime")
+#my_packages = c("mime")
+my_packages = c("stringi")
 
 ###########################################################
 

@@ -24,21 +24,46 @@ this buildpack inspired from followingbuildpacks.
 cf push your-R-app -b https://github.com/myminseok/R-buildpack
 or
 cf push your-R-app -b R-buildpack
-
 ```
 
-# Installing R Packages
+# Installing R Packages into your R runtime
 put init.R file in your source code.
 
 refer to: https://github.com/virtualstaticvoid/heroku-buildpack-r/tree/heroku-16
 
 # Sample app
-
 https://github.com/rstudio/shiny-examples
 
 
-# Building the Buildpack
+# Building the Buildpack (simple)
 
+1. setup local development env
+
+  ```bash
+  git submodule update --init
+  
+  BUNDLE_GEMFILE=cf.Gemfile bundle
+  ```
+
+1. Build the buildpack
+
+  ``` 
+  cd R-buildpack/
+
+  ./build_final.sh
+
+  # login to CF as admin
+  cf login
+
+  ./upload_buildpack.sh
+
+  cd test/shiny/001-hello
+
+  cf push
+
+  ```
+
+# Building the Buildpack (advanced)
 
 1. Make sure you have fetched submodules
 
@@ -54,10 +79,46 @@ https://github.com/rstudio/shiny-examples
 
 1. Build the buildpack
 
-  ```shell
+  a. build base image (R-buildpack/apt-archives/home_vcap_app_fakechroot.tar.gz)
+  ``` 
+  cd R-buildpack/
+
+  cp manifest_base_image.yml  manifest.yml
+  cp ./bin/compile_base_image ./bin/compile
+
   bundle exec buildpack-packager --cached
-  BUNDLE_GEMFILE=cf.Gemfile bundle exec buildpack-packager [ --uncached | --cached ]
+
+  cf delete-buildpack R-buildpack -f
+  cf create-buildpack R-buildpack $abs_path/R_buildpack-cached-v0.1.0.zip 13 --enable
+  cf update-buildpack R-buildpack -p ./R_buildpack-cached-v0.1.0.zip   
+
+  cd test/build_base_image
+  cf push
+  cf download-droplet build ./droplet
+  tar xf ./droplet
+  cp ./app/home_vcap_app_fakechroot.tar.gz [path to R-buildpack/apt-archives]/home_vcap_app_fakechroot.tar.gz
+
   ```
+
+  b. build final buildpack using the "base image" which has build before.(R-buildpack/R_buildpack-cached-v0.1.0.zip)
+
+  ``` 
+  cd R-buildpack/
+
+  cp manifest_final.yml  manifest.yml
+  cp ./bin/compile_final ./bin/compile
+  
+  bundle exec buildpack-packager --cached
+  
+  cf delete-buildpack R-buildpack -f
+  cf create-buildpack R-buildpack $abs_path/R_buildpack-cached-v0.1.0.zip 13 --enable
+  cf update-buildpack R-buildpack -p ./R_buildpack-cached-v0.1.0.zip   
+ 
+  cd test/shiny/001-hello
+  cf push
+  
+  ```
+
 
 1. test buildpack
 
@@ -73,8 +134,6 @@ cf delete-buildpack R-buildpack -f
 cf create-buildpack R-buildpack ./R_buildpack-cached-v1.6.47.zip 13 --enable
 cf update-buildpack R-buildpack -p ./R_buildpack-cached-v1.6.47.zip   
 ```
-
-
 
 or
 
@@ -113,15 +172,13 @@ http://engineering.pivotal.io/post/creating-a-custom-buildpack/
 https://docs.cloudfoundry.org/buildpacks/custom.html/
 https://github.com/cloudfoundry/buildpack-packager/
 Official buildpack documentation can be found at [ruby buildpack docs](http://docs.cloudfoundry.org/buildpacks/ruby/index.html).
+https://github.com/rstudio/shiny-examples
 
 # TODO
+
 R wrapper
-
-R font.
-
 install R studio
 
-minimize buildpack size.
 
 
 

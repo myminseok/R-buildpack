@@ -15,3 +15,4 @@ export PKG_CONFIG_PATH="$CHROOT_DIR/usr/lib/x86_64-linux-gnu/pkgconfig:$CHROOT_D
 # for R.
 export EDITOR=vim
 
+export DEBOOTSTRAP_DIR=/home/vcap/app/usr/share/debootstrap

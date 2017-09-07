@@ -1,0 +1,57 @@
+
+- name: home_vcap_app_fakechroot-merged.tar.gz
+  version: 1
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/home-vcap-app-image/home_vcap_app_fakechroot-merged.tar.gz
+  md5: 55bb5d98d72427dee97e0b1cca5bbb43
+  cf_stacks:
+  - cflinuxfs2
+- name: home_vcap_app_fakechroot.tar.gz.partaa
+  version: 1
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/home-vcap-app-image/home_vcap_app_fakechroot.tar.gz.partaa
+  md5: d8cf60d2334785321a864abc60c065c6
+  cf_stacks:
+  - cflinuxfs2
+- name: home_vcap_app_fakechroot.tar.gz.partab
+  version: 1
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/home-vcap-app-image/home_vcap_app_fakechroot.tar.gz.partab
+  md5: 09d955fac9ae8688c9f3b8f5e92a8aef
+  cf_stacks:
+  - cflinuxfs2
+- name: home_vcap_app_fakechroot.tar.gz.partac
+  version: 1
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/home-vcap-app-image/home_vcap_app_fakechroot.tar.gz.partac
+  md5: f0b520dab9330645230a163b20c019c6
+  cf_stacks:
+  - cflinuxfs2
+- name: home_vcap_app_fakechroot.tar.gz.partad
+  version: 1
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/home-vcap-app-image/home_vcap_app_fakechroot.tar.gz.partad
+  md5: 52f092c2c877756e4f6378f797627a9f
+  cf_stacks:
+  - cflinuxfs2
+- name: home_vcap_app_fakechroot.tar.gz.partae
+  version: 1
+  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/home-vcap-app-image/home_vcap_app_fakechroot.tar.gz.partae
+  md5: 34d6aac09db3a9f09e74202f0d82d6fb
+  cf_stacks:
+  - cflinuxfs2
+
+compile_R
+
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR _manifest_meta.yml 1 _manifest_meta.yml 
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR home_vcap_app_fakechroot-merged.tar.gz 1 home_vcap_app_fakechroot-merged.tar.gz 
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR home_vcap_app_fakechroot.tar.gz.partaa 1 home_vcap_app_fakechroot.tar.gz.partaa 
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR home_vcap_app_fakechroot.tar.gz.partab 1 home_vcap_app_fakechroot.tar.gz.partab 
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR home_vcap_app_fakechroot.tar.gz.partac 1 home_vcap_app_fakechroot.tar.gz.partac 
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR home_vcap_app_fakechroot.tar.gz.partad 1 home_vcap_app_fakechroot.tar.gz.partad 
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR home_vcap_app_fakechroot.tar.gz.partae 1 home_vcap_app_fakechroot.tar.gz.partae 
+
+fakeroot_install_r_packages.sh
+
+R CMD INSTALL --clean /r_packages/_manifest_meta.yml
+R CMD INSTALL --clean /r_packages/home_vcap_app_fakechroot-merged.tar.gz
+R CMD INSTALL --clean /r_packages/home_vcap_app_fakechroot.tar.gz.partaa
+R CMD INSTALL --clean /r_packages/home_vcap_app_fakechroot.tar.gz.partab
+R CMD INSTALL --clean /r_packages/home_vcap_app_fakechroot.tar.gz.partac
+R CMD INSTALL --clean /r_packages/home_vcap_app_fakechroot.tar.gz.partad
+R CMD INSTALL --clean /r_packages/home_vcap_app_fakechroot.tar.gz.partae

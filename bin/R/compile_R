@@ -38,6 +38,10 @@ APT_CACHE_DIR="$CACHE_DIR/apt/cache"
 APT_STATE_DIR="$CACHE_DIR/apt/state"
 CHROOT_DIR="/home/vcap/app"
 
+#CRAN_MIRROR="http://cran.nexr.com"
+CRAN_MIRROR="http://cran.ism.ac.jp"
+
+
 # env for staging.
 export PATH="$CHROOT_DIR/usr/bin:$CHROOT_DIR/usr/sbin:$CHROOT_DIR/usr/lib/rstudio-server:/sbin:/usr/sbin:$PATH"
 export LD_LIBRARY_PATH="$CHROOT_DIR/lib/x86_64-linux-gnu/:$CHROOT_DIR/usr/lib/x86_64-linux-gnu:$CHROOT_DIR/usr/lib/i386-linux-gnu:$CHROOT_DIR/usr/lib:$LD_LIBRARY_PATH"
@@ -52,114 +56,53 @@ APT_OPTIONS="-o debug::nolocking=true -o dir::cache=$APT_CACHE_DIR -o dir::state
 
 
 
-topic "Setting up R environment"  # fakeroot
+topic "Setting up R runtime environment"  # fakeroot
 mkdir -p $CHROOT_DIR/.profile.d
 mkdir -p "$APT_CACHE_DIR/archives/partial"
 mkdir -p "$APT_STATE_DIR/lists/partial"
+mkdir -p $CHROOT_DIR/apts_from_buildpack
 
-cp $BUILDPACK_DIR/bin/R/fakeroot_install_apts.sh $CHROOT_DIR/fakeroot_install_apts.sh
-cp $BUILDPACK_DIR/bin/R/fakeroot_print_broken_link.sh $CHROOT_DIR/fakeroot_print_broken_link.sh
-cp $BUILDPACK_DIR/bin/R/fakeroot_fix_symlink.sh $CHROOT_DIR/fakeroot_fix_symlink.sh
-cp $BUILDPACK_DIR/bin/R/fakeroot_install_shiny_to_R.sh $CHROOT_DIR/fakeroot_install_shiny_to_R.sh
-cp $BUILDPACK_DIR/bin/R/fakeroot_install_RStudio.sh $CHROOT_DIR/fakeroot_install_RStudio.sh
-cp $BUILDPACK_DIR/bin/R/fakeroot_run_init_r.sh $CHROOT_DIR/fakeroot_run_init_r.sh
+
+cp $BUILDPACK_DIR/bin/R/*.sh $CHROOT_DIR/
 cp $BUILDPACK_DIR/bin/R/r_environment.sh $CHROOT_DIR/.profile.d/r_environment.sh 
-cp $BUILDPACK_DIR/bin/R/fakeroot.sh $CHROOT_DIR/fakeroot.sh 
-
+cp $BUILDPACK_DIR/bin/R/testmap.cpp $CHROOT_DIR/testmap.cpp
+cp $BUILDPACK_DIR/bin/R/uname $CHROOT_DIR/uname
 chmod 777 $CHROOT_DIR/*.sh
 
-mkdir -p $CHROOT_DIR/usr
-mkdir -p $CHROOT_DIR/lib
-mkdir -p $CHROOT_DIR/etc/alternatives
-mkdir -p $CHROOT_DIR/var/lib/dpkg/alternatives
-mkdir -p $CHROOT_DIR/var/lib/dpkg/updates
-mkdir -p $CHROOT_DIR/var/lib/dpkg/info
-mkdir -p $CHROOT_DIR/var/log
-mkdir -p $CHROOT_DIR/var/cache/apt/archives
-mkdir -p $CHROOT_DIR/tmp
-mkdir -p $CHROOT_DIR/bin && cp -R /bin/* $CHROOT_DIR/bin/
-mkdir -p $CHROOT_DIR/sbin && cp -R /sbin/* $CHROOT_DIR/sbin/
-mkdir -p $CHROOT_DIR/usr/bin && cp -R /usr/bin/* $CHROOT_DIR/usr/bin/
-mkdir -p $CHROOT_DIR/usr/sbin && cp -R /usr/sbin/* $CHROOT_DIR/usr/sbin/
-mkdir -p $CHROOT_DIR/usr/lib/gcc && cp -R /usr/lib/gcc/* $CHROOT_DIR/usr/lib/gcc
-mkdir -p $CHROOT_DIR/usr/include &&  cp -R /usr/include/* $CHROOT_DIR/usr/include
-mkdir -p $CHROOT_DIR/usr/share && cp -R /usr/share/perl*  $CHROOT_DIR/usr/share/
-mkdir -p $CHROOT_DIR/usr/lib && cp -R /usr/lib/perl*  $CHROOT_DIR/usr/lib/
-mkdir -p $CHROOT_DIR/var/lib/dpkg
-mkdir -p $CHROOT_DIR/src/contrib/  # for some source compile packages in R. (ggplot2)
-
-
-## copy fundamental system, libs to fakeroot.
-export PRUNE_EXPR="-path /root -o -path /tmp -o -path /proc -o -path /sys -o -path /lost+found -o -path /etc/ssl/private -o -path /var/spool -o -path /var/cache -o -path /var/log"
-find / \( $PRUNE_EXPR \) -prune -o -print | grep python | grep -v lock | grep -v Lock > list_python && cat list_python | cpio -p -dum $CHROOT_DIR  > /dev/null 2>&1
-find / \( $PRUNE_EXPR \) -prune -o -print | grep apt    | grep -v lock | grep -v Lock > list_apt && cat list_apt | cpio -p -dum $CHROOT_DIR   > /dev/null 2>&1
-find / \( $PRUNE_EXPR \) -prune -o -print | grep dpkg   | grep -v lock | grep -v Lock > list_dpkg && cat list_dpkg | cpio -p -dum $CHROOT_DIR   > /dev/null 2>&1
-find / \( $PRUNE_EXPR \) -prune -o -print | grep debconf| grep -v lock | grep -v Lock > list_debconf && cat list_debconf | cpio -p -dum $CHROOT_DIR > /dev/null 2>&1
-find / \( $PRUNE_EXPR \) -prune -o -print | grep pam| grep -v lock | grep -v Lock > list_pam && cat list_pam | cpio -p -dum $CHROOT_DIR > /dev/null 2>&1
-find / \( $PRUNE_EXPR \) -prune -o -print | grep insserv| grep -v lock | grep -v Lock > list_insserv && cat list_insserv | cpio -p -dum $CHROOT_DIR > /dev/null 2>&1
-
-mkdir -p $CHROOT_DIR/lib/init && cp -R /lib/init/* $CHROOT_DIR/lib/init
-mkdir -p $CHROOT_DIR/lib/lsb && cp -R /lib/lsb/* $CHROOT_DIR/lib/lsb
-
-
-cp /var/lib/dpkg/available $CHROOT_DIR/var/lib/dpkg/available
-cp /var/lib/dpkg/status $CHROOT_DIR/var/lib/dpkg/status
-mkdir -p $CHROOT_DIR/etc/apt && cp -R /etc/apt/* $CHROOT_DIR/etc/apt/
-#mkdir -p $CHROOT_DIR/usr/share/debconf/ && cp -R /usr/share/debconf/* $CHROOT_DIR/usr/share/debconf/
-#cp /etc/debconf.conf $CHROOT_DIR/etc/debconf.conf
-
-ln -s /proc $CHROOT_DIR/proc
-ln -s /dev $CHROOT_DIR/dev
-mkdir -p $CHROOT_DIR/root && cp /home/vcap/.bashrc $CHROOT_DIR/root/.bashrc
-mkdir -p $CHROOT_DIR/etc/network && cp -R /etc/network/* $CHROOT_DIR/etc/network
-cp /etc/passwd  $CHROOT_DIR/etc/passwd
-cp /etc/hosts $CHROOT_DIR/etc/hosts
-cp /etc/group $CHROOT_DIR/etc/group
-cp /etc/bash.bashrc $CHROOT_DIR/etc/bash.bashrc
-cp /etc/ld.so.conf $CHROOT_DIR/etc/ld.so.conf
-cp /etc/ld.so.cache $CHROOT_DIR/etc/ld.so.cache
+topic "tar xf home_vcap_app_fakechroot-merged.tar.gz"
+cd /home/vcap
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR home_vcap_app_fakechroot-merged.tar.gz 1 home_vcap_app_fakechroot-merged.tar.gz
+if [[ ! -f "home_vcap_app_fakechroot-merged.tar.gz" ]]; then
+   echo "[ERROR] home_vcap_app_fakechroot-merged.tar.gz not found in R-buildpack. check R-buildpack/manifest.yml"  | indent
+   exit 1
+fi
+tar xf home_vcap_app_fakechroot-merged.tar.gz  > /dev/null 2>&1 
+rm home_vcap_app_fakechroot-merged.tar.gz
 
 
 
-# topic "Installing fakechroot apts from buildpack "
-$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR libfakechroot_2.17.2-1_amd64.deb 1 libfakechroot_2.17.2-1_amd64.deb
-$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR fakechroot_2.17.2-1_all.deb 1 fakechroot_2.17.2-1_all.deb
-$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR libc6-dev_2.19-0ubuntu6.13_amd64.deb 1 libc6-dev_2.19-0ubuntu6.13_amd64.deb
-dpkg -x ./libfakechroot_2.17.2-1_amd64.deb $CHROOT_DIR/
-dpkg -x ./fakechroot_2.17.2-1_all.deb $CHROOT_DIR/
-dpkg -x ./libc6-dev_2.19-0ubuntu6.13_amd64.deb $CHROOT_DIR/
-
-
-
-##topic "Validating R environment"
+#topic "Validating apt-get environment(final)"
+#fakechroot fakeroot chroot $CHROOT_DIR dpkg --configure -a
 #fakechroot fakeroot chroot $CHROOT_DIR apt-get update
-# check dpkg environment.
-fakechroot fakeroot chroot $CHROOT_DIR dpkg --configure -a
-
-topic "Installing apts from buildpack"
-mkdir -p $CHROOT_DIR/apts_from_buildpack && cp $BUILDPACK_DIR/dependencies/*.deb $CHROOT_DIR/apts_from_buildpack
-fakechroot fakeroot chroot $CHROOT_DIR /fakeroot_install_apts.sh /apts_from_buildpack 2>&1 | indent
-rm -rf $CHROOT_DIR/apts_from_buildpack
-
-
+#fakechroot fakeroot chroot $CHROOT_DIR apt-get install -f
 
 
 topic "Installing apts from Aptfile(online downloading)"
 if [ -s $BUILD_DIR/Aptfile ]; then
-
   mkdir -p $CHROOT_DIR/apts_from_aptfile/archives
   for PACKAGE in $(cat $BUILD_DIR/Aptfile); do
     if [[ $PACKAGE == *deb ]]; then
       PACKAGE_NAME=$(basename $PACKAGE .deb)
       PACKAGE_FILE=$CHROOT_DIR/apts_from_aptfile/$PACKAGE_NAME.deb
-
       topic "Fetching $PACKAGE"
       curl -s -L -z $PACKAGE_FILE -o $PACKAGE_FILE $PACKAGE 2>&1 | indent
     else
       topic "Fetching .debs for $PACKAGE"
       fakechroot fakeroot chroot $CHROOT_DIR apt-get -o dir::cache=/apts_from_aptfile  -y --force-yes -d install --reinstall $PACKAGE 2>&1 | indent
+      #fakechroot fakeroot chroot $CHROOT_DIR apt-get -o dir::cache=/apts_from_aptfile  -y  -d install  $PACKAGE 2>&1 | indent
     fi
   done
+
   #**************************************************************************************************
   ## archived apt files can be packaged into buildpack later.
   ## download using 'cf download-droplet <app-name> <local_file_path>'
@@ -167,6 +110,7 @@ if [ -s $BUILD_DIR/Aptfile ]; then
   #**************************************************************************************************
   if [ $(find $CHROOT_DIR/apts_from_aptfile/archives -maxdepth 1 -name '*.deb' -type f | wc -l ) -gt 0 ]; then
     fakechroot fakeroot chroot $CHROOT_DIR /fakeroot_install_apts.sh /apts_from_aptfile/archives 2>&1 | indent
+    
   else
     echo "no *.deb fetched from 'Aptfile'. skip"  | indent
   fi
@@ -175,17 +119,15 @@ else
 fi
 
 
-##topic "Fixing broken symbolic link[1]"
-#fakechroot fakeroot chroot $CHROOT_DIR  /fakeroot_print_broken_link.sh 2>&1 | indent
-sh $CHROOT_DIR/fakeroot_fix_symlink.sh 2>&1 | indent
-#fakechroot fakeroot chroot $CHROOT_DIR  /fakeroot_print_broken_link.sh 2>&1 | indent
+topic "Install r binary packages into R (offline from buildpack) - pre-comiled"
+## build binary package from source package using following command
+## $ wget http://cran.us.r-project.org/src/contrib/shiny_1.0.5.tar.gz
+## $ R CMD INSTALL --build ./shiny_1.0.5.tar.gz
+## it will generate binary package. then cache the binary to buildpack under 'apt-archives' or public uri.
+## $ R CMD INSTALL ./shiny_1.0.5_R_x86_64-pc-linux-gnu.tar.gz
+mkdir -p $CHROOT_DIR/r_packages && cd $CHROOT_DIR/r_packages
 
-
-
-
-topic "Install shiny packages into R (offline from buildpack)"
-mkdir -p $CHROOT_DIR/shiny_packages
-cd $CHROOT_DIR/shiny_packages
+#shiny
 $BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR Rcpp 0.12.12 Rcpp_0.12.12.tar.gz
 $BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR httpvu 1.3.5 httpuv_1.3.5.tar.gz
 $BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR mime 0.5 mime_0.5.tar.gz
@@ -196,16 +138,38 @@ $BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR htmltools 0.3.6 htmltool
 $BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR R6 2.2.2 R6_2.2.2.tar.gz
 $BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR sourcetools 0.1.6 sourcetools_0.1.6.tar.gz
 $BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR shiny 1.0.5 shiny_1.0.5.tar.gz
-fakechroot fakeroot chroot $CHROOT_DIR sh /fakeroot_install_shiny_to_R.sh 2>&1 | indent
-rm -rf $CHROOT_DIR/shiny_packages
+
+
+## ggplot2
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR RColorBrewer_1.1-2_R_x86_64-pc-linux-gnu.tar.gz 1 RColorBrewer_1.1-2_R_x86_64-pc-linux-gnu.tar.gz 
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR colorspace_1.3-2_R_x86_64-pc-linux-gnu.tar.gz 1 colorspace_1.3-2_R_x86_64-pc-linux-gnu.tar.gz 
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR dichromat_2.0-0_R_x86_64-pc-linux-gnu.tar.gz 1 dichromat_2.0-0_R_x86_64-pc-linux-gnu.tar.gz 
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR digest_0.6.12_R_x86_64-pc-linux-gnu.tar.gz 1 digest_0.6.12_R_x86_64-pc-linux-gnu.tar.gz 
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR ggplot2_2.2.1_R_x86_64-pc-linux-gnu.tar.gz 1 ggplot2_2.2.1_R_x86_64-pc-linux-gnu.tar.gz 
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR gtable_0.2.0_R_x86_64-pc-linux-gnu.tar.gz 1 gtable_0.2.0_R_x86_64-pc-linux-gnu.tar.gz 
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR htmltools_0.3.6_R_x86_64-pc-linux-gnu.tar.gz 1 htmltools_0.3.6_R_x86_64-pc-linux-gnu.tar.gz 
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR httpuv_1.3.5_R_x86_64-pc-linux-gnu.tar.gz 1 httpuv_1.3.5_R_x86_64-pc-linux-gnu.tar.gz 
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR jsonlite_1.5_R_x86_64-pc-linux-gnu.tar.gz 1 jsonlite_1.5_R_x86_64-pc-linux-gnu.tar.gz 
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR labeling_0.3_R_x86_64-pc-linux-gnu.tar.gz 1 labeling_0.3_R_x86_64-pc-linux-gnu.tar.gz 
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR lazyeval_0.2.0_R_x86_64-pc-linux-gnu.tar.gz 1 lazyeval_0.2.0_R_x86_64-pc-linux-gnu.tar.gz 
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR mime_0.5_R_x86_64-pc-linux-gnu.tar.gz 1 mime_0.5_R_x86_64-pc-linux-gnu.tar.gz 
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR munsell_0.4.3_R_x86_64-pc-linux-gnu.tar.gz 1 munsell_0.4.3_R_x86_64-pc-linux-gnu.tar.gz 
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR plyr_1.8.4_R_x86_64-pc-linux-gnu.tar.gz 1 plyr_1.8.4_R_x86_64-pc-linux-gnu.tar.gz 
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR reshape2_1.4.2_R_x86_64-pc-linux-gnu.tar.gz 1 reshape2_1.4.2_R_x86_64-pc-linux-gnu.tar.gz 
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR rlang_0.1.2_R_x86_64-pc-linux-gnu.tar.gz 1 rlang_0.1.2_R_x86_64-pc-linux-gnu.tar.gz 
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR scales_0.5.0_R_x86_64-pc-linux-gnu.tar.gz 1 scales_0.5.0_R_x86_64-pc-linux-gnu.tar.gz 
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR shiny_1.0.5_R_x86_64-pc-linux-gnu.tar.gz 1 shiny_1.0.5_R_x86_64-pc-linux-gnu.tar.gz 
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR sourcetools_0.1.6_R_x86_64-pc-linux-gnu.tar.gz 1 sourcetools_0.1.6_R_x86_64-pc-linux-gnu.tar.gz 
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR stringi_1.1.5_R_x86_64-pc-linux-gnu.tar.gz 1 stringi_1.1.5_R_x86_64-pc-linux-gnu.tar.gz 
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR stringr_1.2.0_R_x86_64-pc-linux-gnu.tar.gz 1 stringr_1.2.0_R_x86_64-pc-linux-gnu.tar.gz 
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR tibble_1.3.4_R_x86_64-pc-linux-gnu.tar.gz 1 tibble_1.3.4_R_x86_64-pc-linux-gnu.tar.gz 
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR viridisLite_0.2.0_R_x86_64-pc-linux-gnu.tar.gz 1 viridisLite_0.2.0_R_x86_64-pc-linux-gnu.tar.gz 
+$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR xtable_1.8-2_R_x86_64-pc-linux-gnu.tar.gz 1 xtable_1.8-2_R_x86_64-pc-linux-gnu.tar.gz 
+
+
+fakechroot fakeroot chroot $CHROOT_DIR sh /fakeroot_install_r_packages.sh 2>&1 | indent
+rm -rf $CHROOT_DIR/r_packages
 cd $CHROOT_DIR
-
-
-
-#topic "Fixing broken symbolic link in fakeroot[2]"
-#fakechroot fakeroot chroot $CHROOT_DIR  /fakeroot_print_broken_link.sh 2>&1 | indent
-sh $CHROOT_DIR/fakeroot_fix_symlink.sh 2>&1 | indent
-#fakechroot fakeroot chroot $CHROOT_DIR  /fakeroot_print_broken_link.sh 2>&1 | indent
 
 
 # install application author dependencies from CRAN
@@ -220,6 +184,7 @@ else
   # assuming run.R is present
   unset INIT_FILE
 fi
+
 
 if [[ ! -z "$INIT_FILE" ]]; then
   # prepare wrapper script
@@ -248,30 +213,7 @@ else
 fi
 
 
-
 topic "Finalizing staged image"
-## copy system files to fakeroot.
-rm -rf $CHROOT_DIR/etc/hosts && cp /etc/hosts $CHROOT_DIR/etc/hosts
-rm -rf $CHROOT_DIR/etc/ld.so.conf && cp /etc/ld.so.conf $CHROOT_DIR/etc/ld.so.conf
-rm -rf $CHROOT_DIR/etc/ld.so.cache && cp /etc/ld.so.conf $CHROOT_DIR/etc/ld.so.cache
-
-
-
-
-# TODO: create wrapper.
-#cat <<EOF >$CHROOT_DIR/R_setup.sh
-##!/bin/bash
-#source /root/.bashrc
-#touch /tmp/app
-#chmod 777 /tmp/app
-#export EDITOR=vim
-#EOF
-
-
-#give environment to later buildpacks
-#export | grep -E -e ' (PATH|LD_LIBRARY_PATH|LIBRARY_PATH|INCLUDE_PATH|CPATH|CPPPATH|PKG_CONFIG_PATH)='  > "$LP_DIR/export"
-
-
 ## topic "moving  $CHROOT_DIR/*  => $BUILD_DIR "
 cp -r $BUILD_DIR/* $CHROOT_DIR/
 rm -rf $BUILD_DIR/*
@@ -279,10 +221,9 @@ mv $CHROOT_DIR/*  $BUILD_DIR
 mkdir -p $BUILD_DIR/.profile.d 
 cp -r $CHROOT_DIR/.profile.d/*  $BUILD_DIR/.profile.d/
 
-#topic  "$CHROOT_DIR: "
-#ls -al $CHROOT_DIR
-#topic  "$BUILD_DIR: "
-#ls -al $BUILD_DIR
+
+cd /home/vcap
+
 
 topic "Staging completed"
 

@@ -1,0 +1,10 @@
+---
+applications:
+- name: 095-plot
+  buildpack: R-buildpack
+  #command: echo "BBBB" && nc -l -p 8080
+  command:  source /home/vcap/app/.profile.d/r_environment.sh  ;  fakechroot fakeroot chroot /home/vcap/app sh /run.sh
+  memory: 2GB
+  disk_quota: 2GB
+  health-check-type: process
+
