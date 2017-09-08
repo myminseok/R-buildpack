@@ -1026,8 +1026,6 @@ dependencies:
   - cflinuxfs2
 
 
-
-
 exclude_files:
 - ".bin"
 - ".bundle"
@@ -1047,4 +1045,7 @@ exclude_files:
 - ruby_buildpack-*v*.zip
 - cf_build/
 - tmp/
-- R_buildpack*.zip
+- temp/
+- apt-archives/
+- R*buildpack*.zip%   
+

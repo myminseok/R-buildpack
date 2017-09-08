@@ -1,4 +1,4 @@
-
+WARNING: this branch is just prototype and abandoned. do not try to use this branch. use master branch
 
 # R-buildpack for cloudfoundry
 
