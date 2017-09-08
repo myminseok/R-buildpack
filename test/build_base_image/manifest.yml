@@ -1,7 +1,7 @@
 ---
 applications:
-- name: build-app
-  buildpack: R-buildpack
+- name: rbaseimage 
+  buildpack: Rbase-buildpack
   command: echo "BBBB" && nc -l -p 8080
   memory: 2GB
   disk_quota: 2GB

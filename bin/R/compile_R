@@ -56,7 +56,7 @@ APT_OPTIONS="-o debug::nolocking=true -o dir::cache=$APT_CACHE_DIR -o dir::state
 
 
 
-topic "Setting up R runtime environment"  # fakeroot
+topic "Setup pre-compiled R runtime environment"  # home_vcap_app_fakechroot
 mkdir -p $CHROOT_DIR/.profile.d
 mkdir -p "$APT_CACHE_DIR/archives/partial"
 mkdir -p "$APT_STATE_DIR/lists/partial"
@@ -69,7 +69,7 @@ cp $BUILDPACK_DIR/bin/R/testmap.cpp $CHROOT_DIR/testmap.cpp
 cp $BUILDPACK_DIR/bin/R/uname $CHROOT_DIR/uname
 chmod 777 $CHROOT_DIR/*.sh
 
-topic "tar xf home_vcap_app_fakechroot-merged.tar.gz"
+
 cd /home/vcap
 $BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR home_vcap_app_fakechroot-merged.tar.gz 1 home_vcap_app_fakechroot-merged.tar.gz
 if [[ ! -f "home_vcap_app_fakechroot-merged.tar.gz" ]]; then
@@ -80,46 +80,11 @@ tar xf home_vcap_app_fakechroot-merged.tar.gz  > /dev/null 2>&1
 rm home_vcap_app_fakechroot-merged.tar.gz
 
 
-
-#topic "Validating apt-get environment(final)"
-#fakechroot fakeroot chroot $CHROOT_DIR dpkg --configure -a
-#fakechroot fakeroot chroot $CHROOT_DIR apt-get update
-#fakechroot fakeroot chroot $CHROOT_DIR apt-get install -f
+#topic "Installing apts from Aptfile(online downloading)"
+$CHROOT_DIR/fakeroot_install_apts_from_Aptfile.sh $BUILD_DIR $CHROOT_DIR 2>&1 | indent
 
 
-topic "Installing apts from Aptfile(online downloading)"
-if [ -s $BUILD_DIR/Aptfile ]; then
-  mkdir -p $CHROOT_DIR/apts_from_aptfile/archives
-  for PACKAGE in $(cat $BUILD_DIR/Aptfile); do
-    if [[ $PACKAGE == *deb ]]; then
-      PACKAGE_NAME=$(basename $PACKAGE .deb)
-      PACKAGE_FILE=$CHROOT_DIR/apts_from_aptfile/$PACKAGE_NAME.deb
-      topic "Fetching $PACKAGE"
-      curl -s -L -z $PACKAGE_FILE -o $PACKAGE_FILE $PACKAGE 2>&1 | indent
-    else
-      topic "Fetching .debs for $PACKAGE"
-      fakechroot fakeroot chroot $CHROOT_DIR apt-get -o dir::cache=/apts_from_aptfile  -y --force-yes -d install --reinstall $PACKAGE 2>&1 | indent
-      #fakechroot fakeroot chroot $CHROOT_DIR apt-get -o dir::cache=/apts_from_aptfile  -y  -d install  $PACKAGE 2>&1 | indent
-    fi
-  done
-
-  #**************************************************************************************************
-  ## archived apt files can be packaged into buildpack later.
-  ## download using 'cf download-droplet <app-name> <local_file_path>'
-  ## /apts_from_aptfile folder to download *.deb which can be use to make buildpack later.
-  #**************************************************************************************************
-  if [ $(find $CHROOT_DIR/apts_from_aptfile/archives -maxdepth 1 -name '*.deb' -type f | wc -l ) -gt 0 ]; then
-    fakechroot fakeroot chroot $CHROOT_DIR /fakeroot_install_apts.sh /apts_from_aptfile/archives 2>&1 | indent
-    
-  else
-    echo "no *.deb fetched from 'Aptfile'. skip"  | indent
-  fi
-else
-  echo "no 'Aptfile' uploaded. skip" | indent
-fi
-
-
-topic "Install r binary packages into R (offline from buildpack) - pre-comiled"
+topic "Install r binary(pre-comiled) packages from buildpack(cached)"
 ## build binary package from source package using following command
 ## $ wget http://cran.us.r-project.org/src/contrib/shiny_1.0.5.tar.gz
 ## $ R CMD INSTALL --build ./shiny_1.0.5.tar.gz
@@ -214,15 +179,18 @@ fi
 
 
 topic "Finalizing staged image"
+
+# remove archived apt-files in /var/cache/apt/archives, reducing about 60M
+fakechroot fakeroot chroot $CHROOT_DIR apt-get clean
+rm -rf $CHROOT_DIR/apts_from_aptfile 
+
+
 ## topic "moving  $CHROOT_DIR/*  => $BUILD_DIR "
-cp -r $BUILD_DIR/* $CHROOT_DIR/
-rm -rf $BUILD_DIR/*
-mv $CHROOT_DIR/*  $BUILD_DIR
+cp -r $BUILD_DIR/* $CHROOT_DIR/  # copying user upload artifacts
+rm -rf $BUILD_DIR/*   # clean up target folder.
+mv $CHROOT_DIR/*  $BUILD_DIR  # back porting.
 mkdir -p $BUILD_DIR/.profile.d 
 cp -r $CHROOT_DIR/.profile.d/*  $BUILD_DIR/.profile.d/
-
-
-cd /home/vcap
 
 
 topic "Staging completed"

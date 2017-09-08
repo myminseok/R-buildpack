@@ -72,7 +72,7 @@ dependencies:
 - name: home_vcap_app_fakechroot-merged.tar.gz
   version: 1
   uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/home-vcap-app-image/home_vcap_app_fakechroot-merged.tar.gz
-  md5: 55bb5d98d72427dee97e0b1cca5bbb43
+  md5: edebb919433c260ae6c2794894566049
   cf_stacks:
   - cflinuxfs2
 
@@ -299,6 +299,7 @@ dependencies:
   - cflinuxfs2
 
 
+
 exclude_files:
 - ".bin"
 - ".bundle"
@@ -318,4 +319,6 @@ exclude_files:
 - ruby_buildpack-*v*.zip
 - cf_build/
 - tmp/
-- R_buildpack*.zip
+- temp/
+- apt-archives/
+- R*buildpack*.zip
