@@ -12,6 +12,7 @@ machete.log
 repos/*
 ruby_buildpack.zip
 tmp/
+temp/
 vendor/cache/*
 vendor/bundle/*
 vendor/bundler/*

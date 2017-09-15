@@ -128,7 +128,7 @@ fakechroot fakeroot chroot $CHROOT_DIR apt-get clean
 
 
 
-echo "archiving /home/vcap/app  => /home/vcap/app/home_vcap_app_fakechroot.tar.gz"
+echo "archiving /home/vcap/app  => /home/vcap/app/home_vcap_app_fakechroot.tar.gz" | indent
 cd /home/vcap
 $CHROOT_DIR/gen-home-vcap-app-image.sh ./app
 mv home_vcap_app_fakechroot.tar.gz* $BUILD_DIR
@@ -143,8 +143,14 @@ mkdir -p $BUILD_DIR/.profile.d
 cp -r $CHROOT_DIR/.profile.d/*  $BUILD_DIR/.profile.d/
 
 topic "Staging completed"
-
-
-topic "[you need to] download the base image from PCF container "
-echo "	run this script anyfolder : R-buildpack/apt-archives/download_base_image_from_droplet.sh"
+echo "" 
+echo "" 
+echo ""
+topic "you NEED to following "
+echo ""  | indent
+echo "1. download the base image from PCF container by running following script(run under anyfolder)"  | indent
+echo "    <R-buildpack>/apt-archives/download_base_image_from_droplet.sh"  | indent
+echo "" | indent
+echo "build findal buildpack." | indent
+echo "    <R-buildpack>/build_final.sh"  | indent
 
