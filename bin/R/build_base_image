@@ -39,8 +39,6 @@ function indent() {
 APT_CACHE_DIR="$CACHE_DIR/apt/cache"
 APT_STATE_DIR="$CACHE_DIR/apt/state"
 CHROOT_DIR="/home/vcap/app"
-#CRAN_MIRROR="http://cran.nexr.com"
-CRAN_MIRROR="http://cran.ism.ac.jp"
 
 
 # env for staging.
@@ -110,11 +108,14 @@ fakechroot fakeroot chroot $CHROOT_DIR /fakeroot_install_apts_cached.sh /apts_fr
 rm -rf $CHROOT_DIR/apts_from_buildpack
 
 
+
+
 ## [TODO ] this section should be removed later
 #echo "libc6" >> $BUILD_DIR/Aptfile #libc6-dev_2.19-0ubuntu6_amd64.deb
 echo "g++" >> $BUILD_DIR/Aptfile
 #topic "Installing apts from Aptfile(online downloading)"
-ls -al $CHROOT_DIR/fakeroot_install_apts_from_Aptfile.sh
+
+$CHROOT_DIR/fakeroot_update_apt_repo.sh $BUILD_DIR $CHROOT_DIR 2>&1 | indent
 $CHROOT_DIR/fakeroot_install_apts_from_Aptfile.sh $BUILD_DIR $CHROOT_DIR 2>&1 | indent
 
 
@@ -125,7 +126,6 @@ fakechroot fakeroot chroot $CHROOT_DIR sh /fakeroot_testmap.sh
 
 
 topic "Installing R CRAN key (online)"
-echo "deb $CRAN_MIRROR/bin/linux/ubuntu trusty/" >> $CHROOT_DIR/etc/apt/sources.list
 cat $CHROOT_DIR/etc/apt/sources.list
 fakechroot fakeroot chroot $CHROOT_DIR apt-key adv --keyserver  keyserver.ubuntu.com --recv-keys 51716619E084DAB9
 fakechroot fakeroot chroot $CHROOT_DIR apt-get update

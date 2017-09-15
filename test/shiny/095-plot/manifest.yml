@@ -7,4 +7,5 @@ applications:
   memory: 2GB
   disk_quota: 2GB
   health-check-type: process
-
+  env:
+    TEST_ENV: testvalue

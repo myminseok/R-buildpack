@@ -8,4 +8,9 @@ applications:
   memory: 2GB
   disk_quota: 2GB
   health-check-type: process
+  env:
+#    APT_REPO_UBUNTU: http://kr.archive.ubuntu.com/ubuntu/
+#    APT_REPO_CRAN: http://cloud.r-project.org/bin/linux/ubuntu 
+    CRAN_MIRROR: http://cloud.r-project.org/
+  
 

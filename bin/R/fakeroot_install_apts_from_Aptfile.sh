@@ -33,7 +33,7 @@ if [ -s $BUILD_DIR/Aptfile ]; then
       topic "Fetching $PACKAGE"
       curl -s -L -z $PACKAGE_FILE -o $PACKAGE_FILE $PACKAGE 2>&1 | indent
     else
-      topic "Fetching .debs for $PACKAGE"
+      topic "Fetching 2 .debs for $PACKAGE"
       fakechroot fakeroot chroot $CHROOT_DIR apt-get -o dir::cache=/apts_from_aptfile  -y --force-yes -d install --reinstall $PACKAGE 2>&1 | indent
       #fakechroot fakeroot chroot $CHROOT_DIR apt-get -o dir::cache=/apts_from_aptfile  -y  -d install  $PACKAGE 2>&1 | indent
     fi
