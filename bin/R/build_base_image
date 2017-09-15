@@ -12,23 +12,7 @@ BUILD_DIR=$1
 CACHE_DIR=$2
 LP_DIR=`cd $(dirname $0); cd ..; pwd`
 
-function error() {
-  echo " !     $*" >&2
-  exit 1
-}
-
-function topic() {
-  echo "-----> $*"
-}
-
-function indent() {
-  c='s/^/       /'
-  case $(uname) in
-    Darwin) sed -l "$c";;
-    *)      sed -u "$c";;
-  esac
-}
-
+source $BUILDPACK_DIR/bin/R/staging_common.sh
 
 
 ### BUILD_DIR     /tmp/app
@@ -43,8 +27,6 @@ CHROOT_DIR="/home/vcap/app"
 
 # env for staging.
 export PATH="$CHROOT_DIR/usr/bin:$CHROOT_DIR/usr/sbin:$CHROOT_DIR/usr/lib/rstudio-server:/sbin:/usr/sbin:$PATH"
-APT_OPTIONS="-o debug::nolocking=true -o dir::cache=$APT_CACHE_DIR -o dir::state=$APT_STATE_DIR"
-
 
 topic "Setting up base runtime environment"  # fakeroot
 

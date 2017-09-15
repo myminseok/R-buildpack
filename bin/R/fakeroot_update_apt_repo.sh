@@ -3,28 +3,11 @@
 set -e
 
 
-function error() {
-  echo " !     $*" >&2
-  exit 1
-}
-
-function topic() {
-  echo "-----> $*"
-}
-
-function indent() {
-  c='s/^/       /'
-  case $(uname) in
-    Darwin) sed -l "$c";;
-    *)      sed -u "$c";;
-  esac
-}
-
 BUILD_DIR=$1
 CHROOT_DIR=$2
-#CRAN_MIRROR="http://cran.nexr.com"
 CRAN_MIRROR="http://cran.ism.ac.jp"
 
+source $BUILDPACK_DIR/bin/R/staging_common.sh
 
 #topic "Detecting a new apt-get repo from env variable 'APT_REPO_UBUNTU'"
 if [ ! -z $APT_REPO_UBUNTU ]; then
