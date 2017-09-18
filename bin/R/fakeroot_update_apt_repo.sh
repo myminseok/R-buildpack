@@ -9,8 +9,20 @@ CRAN_MIRROR="http://cran.ism.ac.jp"
 
 source $BUILDPACK_DIR/bin/R/staging_common.sh
 
+## TODO
+mv $CHROOT_DIR/etc/apt/sources.list $CHROOT_DIR/etc/apt/sources.list.orig
+cp $BUILDPACK_DIR/bin/R/sources.list $CHROOT_DIR/etc/apt/sources.list
+fakechroot fakeroot chroot $CHROOT_DIR apt-get update
+
+## TODO (for plotly - libgdal20)
+# echo "deb http://ppa.launchpad.net/ubuntugis/ppa/ubuntu $(lsb_release -cs) main" >>  $CHROOT_DIR/etc/apt/sources.list.d/ubuntugis-ppa.list
+# fakechroot fakeroot chroot $CHROOT_DIR apt-key adv --keyserver  keyserver.ubuntu.com --recv-keys 314DF160
+# fakechroot fakeroot chroot $CHROOT_DIR apt-get update 
+# fakechroot fakeroot chroot $CHROOT_DIR apt-get install -f 
+
+
 #topic "Detecting a new apt-get repo from env variable 'APT_REPO_UBUNTU'"
-if [ ! -z $APT_REPO_UBUNTU ]; then
+if [[ ! -z $APT_REPO_UBUNTU ]]; then
   ## APT_REPO_UBUNTU=http://91.189.88.161:80/ubuntu/
   ## 
   ## $CHROOT_DIR/etc/apt/sources.list
@@ -19,6 +31,7 @@ if [ ! -z $APT_REPO_UBUNTU ]; then
   ## deb http://192.168:8080/abc/ubuntu trusty main
   echo "Detected a new apt-get repo: $APT_REPO_UBUNTU" | indent
   sed -i "s|.*ubuntu.com.*|deb $APT_REPO_UBUNTU trusty main|g" $CHROOT_DIR/etc/apt/sources.list
+
   REPO_UPDATED="OK"
 fi
 
@@ -31,7 +44,7 @@ fi
 
 
 #topic "Detecting a new apt-get repo from env variable 'APT_REPO_CRAN'"
-if [ ! -z $APT_REPO_CRAN ]; then
+if [[ ! -z $APT_REPO_CRAN ]]; then
   ## APT_REPO_CRAN=http://91.189.88.161:80/bin/linux/ubuntu
   ## $CHROOT_DIR/etc/apt/sources.list
   ## deb http://cran.ism.ac.jp/bin/linux/ubuntu trusty/

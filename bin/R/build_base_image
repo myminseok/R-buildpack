@@ -37,23 +37,24 @@ mkdir -p "$APT_STATE_DIR/lists/partial"
 mkdir -p $CHROOT_DIR/apts_from_buildpack
 mkdir -p $CHROOT_DIR/apts_from_aptfile
 
-cp $BUILDPACK_DIR/bin/R/*.sh $CHROOT_DIR/
+cp $BUILDPACK_DIR/bin/R/*.sh $CHROOT_DIR
+chmod 777 $CHROOT_DIR/*.sh
 cp $BUILDPACK_DIR/bin/R/r_environment.sh $CHROOT_DIR/.profile.d/r_environment.sh 
 cp $BUILDPACK_DIR/bin/R/testmap.cpp $CHROOT_DIR/testmap.cpp
 cp $BUILDPACK_DIR/bin/R/uname $CHROOT_DIR/uname
-chmod 777 $CHROOT_DIR/*.sh
 
 
-$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR libc6-dev_2.19-0ubuntu6_amd64.deb 1 $CHROOT_DIR/apts_from_buildpack/libc6-dev_2.19-0ubuntu6_amd64.deb
-$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR libfakechroot_2.17.2-1_amd64.deb 1 $CHROOT_DIR/apts_from_buildpack/libfakechroot_2.17.2-1_amd64.deb
-$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR fakechroot_2.17.2-1_all.deb 1 $CHROOT_DIR/apts_from_buildpack/fakechroot_2.17.2-1_all.deb
-$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR debootstrap 1.0.59 $CHROOT_DIR/apts_from_buildpack/debootstrap_1.0.59_all.deb
-#dpkg -A -R $CHROOT_DIR/apts_from_buildpack/
-dpkg -x $CHROOT_DIR/apts_from_buildpack/libc6-dev_2.19-0ubuntu6_amd64.deb $CHROOT_DIR
-dpkg -x $CHROOT_DIR/apts_from_buildpack/libfakechroot_2.17.2-1_amd64.deb $CHROOT_DIR
-dpkg -x $CHROOT_DIR/apts_from_buildpack/fakechroot_2.17.2-1_all.deb $CHROOT_DIR
-dpkg -x $CHROOT_DIR/apts_from_buildpack/debootstrap_1.0.59_all.deb $CHROOT_DIR
 
+#$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR libc6-dev_2.19-0ubuntu6_amd64.deb 1 $CHROOT_DIR/apts_from_buildpack/libc6-dev_2.19-0ubuntu6_amd64.deb
+#$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR libfakechroot_2.17.2-1_amd64.deb 1 $CHROOT_DIR/apts_from_buildpack/libfakechroot_2.17.2-1_amd64.deb
+#$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR fakechroot_2.17.2-1_all.deb 1 $CHROOT_DIR/apts_from_buildpack/fakechroot_2.17.2-1_all.deb
+#$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR debootstrap 1.0.59 $CHROOT_DIR/apts_from_buildpack/debootstrap_1.0.59_all.deb
+##dpkg -A -R $CHROOT_DIR/apts_from_buildpack/
+
+dpkg -x $BUILDPACK_DIR/apt-archives-base/fakechroot/libc6-dev_2.19-0ubuntu6_amd64.deb $CHROOT_DIR
+dpkg -x $BUILDPACK_DIR/apt-archives-base/fakechroot/libfakechroot_2.17.2-1_amd64.deb $CHROOT_DIR
+dpkg -x $BUILDPACK_DIR/apt-archives-base/fakechroot/fakechroot_2.17.2-1_all.deb $CHROOT_DIR
+dpkg -x $BUILDPACK_DIR/apt-archives-base/fakechroot/debootstrap_1.0.59_all.deb $CHROOT_DIR
 
 
 # [TODO] to skip configuring makdev error while debootstrap
@@ -66,13 +67,10 @@ source $CHROOT_DIR/.profile.d/r_environment.sh
 DEBOOTSTRAP_DIR=/home/vcap/app/usr/share/debootstrap
 fakechroot fakeroot debootstrap --variant=fakechroot trusty $CHROOT_DIR/
 
-
 ## to skip makedev inside of fakechroot 
 mv $CHROOT_DIR/var/lib/dpkg/info/makedev.postinst $CHROOT_DIR/var/lib/dpkg/info/makedev.postinst.orig
 cp $BUILDPACK_DIR/bin/R/makedev.postinst $CHROOT_DIR/var/lib/dpkg/info/makedev.postinst
 chmod 655 $CHROOT_DIR/var/lib/dpkg/info/makedev.postinst
-
-
 
 topic "Validating apt-get environment"
 fakechroot fakeroot chroot $CHROOT_DIR dpkg --configure -a
@@ -81,15 +79,13 @@ fakechroot fakeroot chroot $CHROOT_DIR apt-get install -f
 
 
 
+
 topic "Installing R apts from buildpack (cached)"
 ## r-base from CRAN
 ## libcurl4-openssl-dev
 ## libcairo2-dev
-mkdir -p $CHROOT_DIR/apts_from_buildpack && cp $BUILDPACK_DIR/dependencies/*.deb $CHROOT_DIR/apts_from_buildpack
-fakechroot fakeroot chroot $CHROOT_DIR /fakeroot_install_apts_cached.sh /apts_from_buildpack 2>&1 | indent
-rm -rf $CHROOT_DIR/apts_from_buildpack
-
-
+$CHROOT_DIR/fakeroot_install_apts_archives.sh "$BUILDPACK_DIR" "$CHROOT_DIR" "etc" "$BUILDPACK_DIR/apt-archives-base/etc" 2>&1 | indent
+$CHROOT_DIR/fakeroot_install_apts_archives.sh "$BUILDPACK_DIR" "$CHROOT_DIR" "r-base" "$BUILDPACK_DIR/apt-archives-base/r-base" 2>&1 | indent
 
 
 ## [TODO ] this section should be removed later
@@ -104,7 +100,6 @@ $CHROOT_DIR/fakeroot_install_apts_from_Aptfile.sh $BUILD_DIR $CHROOT_DIR 2>&1 | 
 ##fakechroot fakeroot chroot $CHROOT_DIR apt-get install -y g++
 topic "g++ test "
 fakechroot fakeroot chroot $CHROOT_DIR sh /fakeroot_testmap.sh
-
 
 
 topic "Installing R CRAN key (online)"
@@ -122,18 +117,13 @@ fakechroot fakeroot chroot $CHROOT_DIR apt-get install -f
 
 
 topic "Finalizing staged image"
-
 # remove archived apt-files in /var/cache/apt/archives, reducing about 60M
 fakechroot fakeroot chroot $CHROOT_DIR apt-get clean
-
-
 
 echo "archiving /home/vcap/app  => /home/vcap/app/home_vcap_app_fakechroot.tar.gz" | indent
 cd /home/vcap
 $CHROOT_DIR/gen-home-vcap-app-image.sh ./app
 mv home_vcap_app_fakechroot.tar.gz* $BUILD_DIR
-
-
 
 ## topic "moving  $CHROOT_DIR/*  => $BUILD_DIR "
 cp -r $BUILD_DIR/* $CHROOT_DIR/  # copying user upload artifacts
@@ -149,7 +139,7 @@ echo ""
 topic "you NEED to following "
 echo ""  | indent
 echo "1. download the base image from PCF container by running following script(run under anyfolder)"  | indent
-echo "    <R-buildpack>/apt-archives/download_base_image_from_droplet.sh"  | indent
+echo "    <R-buildpack>/base-image/download_base_image_from_droplet.sh"  | indent
 echo "" | indent
 echo "build findal buildpack." | indent
 echo "    <R-buildpack>/build_final.sh"  | indent
