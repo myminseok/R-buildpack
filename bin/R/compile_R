@@ -115,11 +115,14 @@ $BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR tibble_1.3.4_R_x86_64-pc
 $BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR viridisLite_0.2.0_R_x86_64-pc-linux-gnu.tar.gz 1 viridisLite_0.2.0_R_x86_64-pc-linux-gnu.tar.gz 
 $BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR xtable_1.8-2_R_x86_64-pc-linux-gnu.tar.gz 1 xtable_1.8-2_R_x86_64-pc-linux-gnu.tar.gz 
 
-
 fakechroot fakeroot chroot $CHROOT_DIR sh /fakeroot_install_r_packages.sh 2>&1 | indent
-rm -rf $CHROOT_DIR/r_packages
 cd $CHROOT_DIR
 
+if [[ -f "$BUILD_DIR/user_provided_staging.sh" ]]; then
+  chmod 777 $BUILD_DIR/user_provided_staging.sh
+  $BUILD_DIR/user_provided_staging.sh "$BUILDPACK_DIR" "$CHROOT_DIR" 2>&1 | indent
+  cd $CHROOT_DIR
+fi
 
 # install application author dependencies from CRAN
 topic "R initialize: Executing init.r script (online downloading dependencies)"

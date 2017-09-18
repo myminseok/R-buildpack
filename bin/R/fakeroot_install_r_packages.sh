@@ -44,6 +44,3 @@ R CMD INSTALL --clean /r_packages/tibble_1.3.4_R_x86_64-pc-linux-gnu.tar.gz
 R CMD INSTALL --clean /r_packages/lazyeval_0.2.0_R_x86_64-pc-linux-gnu.tar.gz
 R CMD INSTALL --clean /r_packages/ggplot2_2.2.1_R_x86_64-pc-linux-gnu.tar.gz
 
-
-
-exit

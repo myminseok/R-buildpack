@@ -12,12 +12,18 @@ source $BUILDPACK_DIR/bin/R/staging_common.sh
 if [ -s $BUILD_DIR/Aptfile ]; then
   mkdir -p $CHROOT_DIR/apts_from_aptfile/archives
   for PACKAGE in $(cat $BUILD_DIR/Aptfile); do
+
+    if [[ $PACKAGE == "#"* ]]; then
+      continue
+    fi
+
     if [[ $PACKAGE == *deb ]]; then
       PACKAGE_NAME=$(basename $PACKAGE .deb)
       PACKAGE_FILE=$CHROOT_DIR/apts_from_aptfile/$PACKAGE_NAME.deb
       topic "Fetching $PACKAGE"
       curl -s -L -z $PACKAGE_FILE -o $PACKAGE_FILE $PACKAGE 2>&1 | indent
     else
+     
       topic "Fetching .debs for $PACKAGE"
       fakechroot fakeroot chroot $CHROOT_DIR apt-get -o dir::cache=/apts_from_aptfile  -y --force-yes -d install --reinstall $PACKAGE 2>&1 | indent
       #fakechroot fakeroot chroot $CHROOT_DIR apt-get -o dir::cache=/apts_from_aptfile  -y  -d install  $PACKAGE 2>&1 | indent

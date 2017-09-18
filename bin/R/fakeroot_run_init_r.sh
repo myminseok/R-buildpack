@@ -18,5 +18,3 @@ R --no-save --quiet --slave --file=$1
 ## install.packages("mime", repos='http://cran.us.r-project.org')
 ## install.packages("Rcpp", repos='http://cran.us.r-project.org')
 ## install.packages("geoR", repos='http://cran.us.r-project.org')
-
-exit
