@@ -22,5 +22,4 @@ echo "[root] apt-get install -fy"
 apt-get install -fy
 echo ""
 echo "DONE"
-## to exit from fakechroot
-exit
+

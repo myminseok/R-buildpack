@@ -9,5 +9,3 @@
 . /root/.bashrc
 gdebi /rstudio_packages/rstudio-server-1.0.153-amd64.deb
 rstudio-server verify-installation
-
-exit
