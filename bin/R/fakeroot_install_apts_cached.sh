@@ -22,4 +22,3 @@ echo "[root] apt-get install -fy"
 apt-get install -fy
 echo ""
 echo "DONE"
-

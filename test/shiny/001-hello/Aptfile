@@ -1,2 +1,8 @@
-libxt-dev
-libxml2-dev
+#libxt-dev
+#libxml2-dev
+#libudunits2-dev
+#libcurl4-openssl-dev
+#libgdal20
+#libarmadillo-dev
+libgdal-dev
+libproj-dev
