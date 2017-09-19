@@ -44,7 +44,6 @@ cp $BUILDPACK_DIR/bin/R/testmap.cpp $CHROOT_DIR/testmap.cpp
 cp $BUILDPACK_DIR/bin/R/uname $CHROOT_DIR/uname
 
 
-
 #$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR libc6-dev_2.19-0ubuntu6_amd64.deb 1 $CHROOT_DIR/apts_from_buildpack/libc6-dev_2.19-0ubuntu6_amd64.deb
 #$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR libfakechroot_2.17.2-1_amd64.deb 1 $CHROOT_DIR/apts_from_buildpack/libfakechroot_2.17.2-1_amd64.deb
 #$BUILDPACK_DIR/bin/R/download_dependency $BUILDPACK_DIR fakechroot_2.17.2-1_all.deb 1 $CHROOT_DIR/apts_from_buildpack/fakechroot_2.17.2-1_all.deb
@@ -62,7 +61,9 @@ dpkg -x $BUILDPACK_DIR/apt-archives-base/fakechroot/debootstrap_1.0.59_all.deb $
 ## mknod: ‘mem-’: Permission denied
 ## makedev mem c 1 1 root kmem 0640: failed
 ## /sbin/MAKEDEV: don't know how to make device "tty0"
-PATH=$CHROOT_DIR:$PATH && echo "uname: $(uname -s)"
+
+PATH=$CHROOT_DIR:$PATH 
+#echo "[DEBUG] uname: $(uname -s)"
 source $CHROOT_DIR/.profile.d/r_environment.sh 
 DEBOOTSTRAP_DIR=/home/vcap/app/usr/share/debootstrap
 fakechroot fakeroot debootstrap --variant=fakechroot trusty $CHROOT_DIR/
@@ -72,20 +73,21 @@ mv $CHROOT_DIR/var/lib/dpkg/info/makedev.postinst $CHROOT_DIR/var/lib/dpkg/info/
 cp $BUILDPACK_DIR/bin/R/makedev.postinst $CHROOT_DIR/var/lib/dpkg/info/makedev.postinst
 chmod 655 $CHROOT_DIR/var/lib/dpkg/info/makedev.postinst
 
-topic "Validating apt-get environment"
+
+topic "Updating apt-get environment"
+mv $CHROOT_DIR/etc/apt/sources.list $CHROOT_DIR/etc/apt/sources.list.orig
+cp $BUILDPACK_DIR/bin/R/sources.list $CHROOT_DIR/etc/apt/sources.list
 fakechroot fakeroot chroot $CHROOT_DIR dpkg --configure -a
 fakechroot fakeroot chroot $CHROOT_DIR apt-get update
 fakechroot fakeroot chroot $CHROOT_DIR apt-get install -f
-
-
 
 
 topic "Installing R apts from buildpack (cached)"
 ## r-base from CRAN
 ## libcurl4-openssl-dev
 ## libcairo2-dev
-$CHROOT_DIR/fakeroot_install_apts_archives.sh "$BUILDPACK_DIR" "$CHROOT_DIR" "etc" "$BUILDPACK_DIR/apt-archives-base/etc" 2>&1 | indent
-$CHROOT_DIR/fakeroot_install_apts_archives.sh "$BUILDPACK_DIR" "$CHROOT_DIR" "r-base" "$BUILDPACK_DIR/apt-archives-base/r-base" 2>&1 | indent
+$CHROOT_DIR/fakeroot_install_apts_archives.sh "$BUILDPACK_DIR" "$CHROOT_DIR" "etc" "$BUILDPACK_DIR/apt-archives-base/etc" "force" 2>&1 | indent
+$CHROOT_DIR/fakeroot_install_apts_archives.sh "$BUILDPACK_DIR" "$CHROOT_DIR" "r-base" "$BUILDPACK_DIR/apt-archives-base/r-base" "force" 2>&1 | indent
 
 
 ## [TODO ] this section should be removed later
@@ -104,7 +106,7 @@ fakechroot fakeroot chroot $CHROOT_DIR sh /fakeroot_testmap.sh
 
 topic "Installing R CRAN key (online)"
 cat $CHROOT_DIR/etc/apt/sources.list
-fakechroot fakeroot chroot $CHROOT_DIR apt-key adv --keyserver  keyserver.ubuntu.com --recv-keys 51716619E084DAB9
+fakechroot fakeroot chroot $CHROOT_DIR apt-key adv --keyserver  keyserver.ubuntu.com --recv-keys E084DAB9
 fakechroot fakeroot chroot $CHROOT_DIR apt-get update
 
 
@@ -139,7 +141,7 @@ echo ""
 topic "you NEED to following "
 echo ""  | indent
 echo "1. download the base image from PCF container by running following script(run under anyfolder)"  | indent
-echo "    <R-buildpack>/base-image/download_base_image_from_droplet.sh"  | indent
+echo "    <R-buildpack>/sbin/download_base_image_from_droplet.sh"  | indent
 echo "" | indent
 echo "build findal buildpack." | indent
 echo "    <R-buildpack>/build_final.sh"  | indent

@@ -6,15 +6,10 @@
 ###########################################################
 # Update this line with the R packages to install:
 
-<<<<<<< HEAD
-#my_packages = c("mime")
-#my_packages = c("stringi")
-my_packages = c("plotly")
-=======
+
 my_packages = c("mime")
 #my_packages = c("stringi")
-#my_packages = c("plotly")
->>>>>>> plotly
+
 
 ###########################################################
 

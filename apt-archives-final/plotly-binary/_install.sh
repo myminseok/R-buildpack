@@ -1,5 +1,8 @@
 #!/bin/bash
 
+## install.packages("htmlwidgets")
+## install.packages("glotly")
+
 
 # fix R for staging env
 cd /usr/lib/R/etc

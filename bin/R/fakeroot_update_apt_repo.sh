@@ -9,11 +9,6 @@ CRAN_MIRROR="http://cran.ism.ac.jp"
 
 source $BUILDPACK_DIR/bin/R/staging_common.sh
 
-## TODO
-mv $CHROOT_DIR/etc/apt/sources.list $CHROOT_DIR/etc/apt/sources.list.orig
-cp $BUILDPACK_DIR/bin/R/sources.list $CHROOT_DIR/etc/apt/sources.list
-fakechroot fakeroot chroot $CHROOT_DIR apt-get update
-
 ## TODO (for plotly - libgdal20)
 # echo "deb http://ppa.launchpad.net/ubuntugis/ppa/ubuntu $(lsb_release -cs) main" >>  $CHROOT_DIR/etc/apt/sources.list.d/ubuntugis-ppa.list
 # fakechroot fakeroot chroot $CHROOT_DIR apt-key adv --keyserver  keyserver.ubuntu.com --recv-keys 314DF160

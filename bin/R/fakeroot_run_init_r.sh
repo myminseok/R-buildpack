@@ -1,4 +1,7 @@
 #!/bin/bash
+###!!! [TODO] R continue install even though there is error in compling.
+
+set -e
 
 . /root/.bashrc
 

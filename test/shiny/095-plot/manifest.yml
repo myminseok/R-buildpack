@@ -9,3 +9,4 @@ applications:
   health-check-type: process
   env:
     TEST_ENV: testvalue
+    PACKAGES: plotly-binary

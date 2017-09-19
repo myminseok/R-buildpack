@@ -65,8 +65,8 @@ $CHROOT_DIR/fakeroot_update_apt_repo.sh $BUILD_DIR $CHROOT_DIR 2>&1 | indent
 
 
 topic "Installing R apts from buildpack (cached)"
-$CHROOT_DIR/fakeroot_install_apts_archives.sh "$BUILDPACK_DIR" "$CHROOT_DIR" "plotly" "$BUILDPACK_DIR/apt-archives-final/plotly-dependency" 2>&1 | indent
-$CHROOT_DIR/fakeroot_install_apts_archives.sh "$BUILDPACK_DIR" "$CHROOT_DIR" "etc" "$BUILDPACK_DIR/apt-archives-final/etc-dependency" 2>&1 | indent
+$CHROOT_DIR/fakeroot_install_apts_archives.sh "$BUILDPACK_DIR" "$CHROOT_DIR" "plotly-dependency" "$BUILDPACK_DIR/apt-archives-final/plotly-dependency" 2>&1 | indent
+$CHROOT_DIR/fakeroot_install_apts_archives.sh "$BUILDPACK_DIR" "$CHROOT_DIR" "etc-dependency" "$BUILDPACK_DIR/apt-archives-final/etc-dependency" 2>&1 | indent
 
 
 topic "Installing apts from Aptfile(online downloading)"
@@ -74,9 +74,9 @@ $CHROOT_DIR/fakeroot_install_apts_from_Aptfile.sh $BUILD_DIR $CHROOT_DIR 2>&1 | 
 
 
 topic "Installing r package(pre-comiled) from buildpack (cached)"
-$CHROOT_DIR/fakeroot_install_r_binaries.sh "$BUILDPACK_DIR" "$CHROOT_DIR" "shiny" "$BUILDPACK_DIR/apt-archives-final/shiny-binary" 2>&1 | indent
-$CHROOT_DIR/fakeroot_install_r_binaries.sh "$BUILDPACK_DIR" "$CHROOT_DIR" "ggplot2" "$BUILDPACK_DIR/apt-archives-final/ggplot2-binary" 2>&1 | indent
-$CHROOT_DIR/fakeroot_install_r_binaries.sh "$BUILDPACK_DIR" "$CHROOT_DIR" "plotly" "$BUILDPACK_DIR/apt-archives-final/plotly-binary" 2>&1 | indent
+$CHROOT_DIR/fakeroot_install_r_binaries.sh "$BUILDPACK_DIR" "$CHROOT_DIR" "shiny-binary" "$BUILDPACK_DIR/apt-archives-final/shiny-binary" "force" 2>&1 | indent
+$CHROOT_DIR/fakeroot_install_r_binaries.sh "$BUILDPACK_DIR" "$CHROOT_DIR" "ggplot2-binary" "$BUILDPACK_DIR/apt-archives-final/ggplot2-binary" "force" 2>&1 | indent
+$CHROOT_DIR/fakeroot_install_r_binaries.sh "$BUILDPACK_DIR" "$CHROOT_DIR" "plotly-binary" "$BUILDPACK_DIR/apt-archives-final/plotly-binary" 2>&1 | indent
 
 
 if [[ -f "$BUILD_DIR/user_provided_staging.sh" ]]; then

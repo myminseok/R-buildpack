@@ -6,7 +6,7 @@
 ###########################################################
 # Update this line with the R packages to install:
 
-my_packages = c("ggplot2", "Cairo", "DT")
+my_packages = c("htmlwidgets", "ggplot2", "Cairo", "DT")
 #my_packages = c("DT")
 ###########################################################
 

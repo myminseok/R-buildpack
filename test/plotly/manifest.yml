@@ -12,5 +12,10 @@ applications:
 #    APT_REPO_UBUNTU: http://kr.archive.ubuntu.com/ubuntu/
 #    APT_REPO_CRAN: http://cloud.r-project.org/bin/linux/ubuntu 
     CRAN_MIRROR: http://cloud.r-project.org/
+    etc-dependency: true
+    plotly-depencency: true
+    plotly-binary: true
+    ggplot2-binary: true
+    
   
 

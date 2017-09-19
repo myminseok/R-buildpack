@@ -1,23 +1,28 @@
 #!/bin/bash
 set -e
 
-work_dir=$1
-if [ -z $1 ]; then 	work_dir="."; fi
-abs_path=$(realpath $work_dir)
+
+SCRIPT_FILE="${BASH_SOURCE[0]}"
+script_script_dir=$(realpath $SCRIPT_FILE)
+script_dir=$(dirname "${script_script_dir}")
 
 echo "merging home_vcap_app file"
-$abs_path/sbin/merge-home-vcap-app-image.sh $abs_path/base-image/home-vcap-app-image/
+$script_dir/sbin/merge-home-vcap-app-image.sh $script_dir/base-image/home-vcap-app-image/
 
 echo ""
-echo "replacing $abs_path/bin/compile_final  => $abs_path/bin/compile"
-cp $abs_path/bin/compile_final $abs_path/bin/compile
-echo "replacing $abs_path/manifest_final.yml => $abs_path/manifest.yml"
-cp $abs_path/manifest_final.yml $abs_path/manifest.yml
+echo "replacing $script_dir/bin/compile_final  => $script_dir/bin/compile"
+cp $script_dir/bin/compile_final $script_dir/bin/compile
+echo "replacing $script_dir/manifest_final.yml => $script_dir/manifest.yml"
+cp $script_dir/manifest_final.yml $script_dir/manifest.yml
 
 echo ""
 echo "packging R-buildpack"
-# git submodule update --init
-# BUNDLE_GEMFILE=cf.Gemfile bundle
+if [ ! -d $script_dir/compile-extensions ]; then
+  git submodule update --init
+fi
+
+BUNDLE_GEMFILE=cf.Gemfile bundle
+
 echo "	bundle exec buildpack-packager --cached"
 bundle exec buildpack-packager --cached
 echo "buidpack packaged"
@@ -28,10 +33,10 @@ echo ""
 
 echo ""
 echo "[you need to] upload buildpack to cloud foundry"
-echo "	$abs_path/upload_buildpack.sh "
+echo "	$script_dir/upload_buildpack.sh "
 echo ""
 echo "[you need to] pushing app"
 echo ""
-echo "	cd $abs_path/test/shiny/001-hello"
+echo "	cd $script_dir/test/shiny/001-hello"
 echo "	cf push"
 echo ""
