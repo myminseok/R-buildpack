@@ -10,3 +10,6 @@ applications:
   env:
     TEST_ENV: testvalue
     PACKAGES: plotly-binary
+    #    APT_REPO_UBUNTU: http://kr.archive.ubuntu.com/ubuntu/
+#    APT_REPO_CRAN: http://cloud.r-project.org/bin/linux/ubuntu 
+#    CRAN_MIRROR: http://cloud.r-project.org/
