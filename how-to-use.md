@@ -1,4 +1,4 @@
-본 bukldpack을 이용하면,  통계분석도구인 [R](http://www.r-project.org/)로 짜여인 R-script를 웹기반 publishing을 자동화 할 수 있습니다.
+본 buildpack을 이용하면,  통계분석도구인 [R](http://www.r-project.org/)로 짜여인 R-script를 웹기반 publishing을 자동화 할 수 있습니다.
 어플리케이션은 [Pivotal Cloud Foundry](https://pivotal.io/platform)상에 자동으로 배포가 되며, 어플리케이션 구동에 필요한 [Shiny](https://shiny.rstudio.com/) web application framework, R 패키지 [CRAN](http://cran.r-project.org/), OS library가 자동으로 구성됩니다.
 이때, 어플리케이션 마다 필요한 실행환경정보는 R-script개발자가 아래의 파일로 제공하게 됩니다.
 
