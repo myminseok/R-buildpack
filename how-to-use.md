@@ -7,7 +7,7 @@
 1. app.R : (필수)  https://github.com/rstudio/shiny-examples 참조.
 2. Aptfile :(선택)
 3. init.r  : (선택)
-4. manifest.yml, run.sh: (선택); 추후 개선 예정.
+4. manifest.yml, run.sh: (필수)
 
 ## 작성 예시
 
