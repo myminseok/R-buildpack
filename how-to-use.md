@@ -4,12 +4,47 @@
 
 ##  R-script 실행환경 구성을 위한 파일
 
-1. app.R : (필수)  https://github.com/rstudio/shiny-examples 참조.
+1. app.R : (필수)  
 2. Aptfile :(선택)
 3. init.r  : (선택)
 4. manifest.yml, run.sh: (필수)
 
 ## 작성 예시
+
+### app.R
+https://github.com/rstudio/shiny-examples 참조.
+
+### init.R
+어플리케이션에서 사용할 R 패키지 목록을 기술합니다.  다운로드 경로는 manifest.yml파일에서 'CRAN_MIRROR' 환경변수에 지정하여 변경할 수 있습니다.
+
+```
+# init.R
+#
+# Example R code to install packages if not already installed
+#
+
+my_packages = c("package_name_1", "package_name_2", ...)
+
+install_if_missing = function(p) {
+  if (p %in% rownames(installed.packages()) == FALSE) {
+    install.packages(p)
+  }
+}
+
+invisible(sapply(my_packages, install_if_missing))
+```
+
+### run.sh
+shiny프레임워크상에서 어플리케이션을 실행하는 스크립트로, 대부부분 변경없이 아래내용 그대로 사용가능합니다.
+
+```
+#!/bin/bash
+. /.profile.d/r_environment.sh
+mkdir -p ./src/contrib/PACKAGES
+export FONTCONFIG_PATH=/etc/fonts
+R -e "shiny::runApp('/', port=8080, host='0.0.0.0')"
+```
+
 
 ### manifest.yml
 ```
@@ -36,33 +71,3 @@ applications:
 - CRAN MIRROR: init.r파일에 기술된 R package가 다운로드될 경로 default: http://cloud.r-project.org
 
 
-## init.R
-어플리케이션에서 사용할 R 패키지 목록을 기술합니다.  다운로드 경로는 manifest.yml파일에서 'CRAN_MIRROR' 환경변수에 지정하여 변경할 수 있습니다.
-
-```
-# init.R
-#
-# Example R code to install packages if not already installed
-#
-
-my_packages = c("package_name_1", "package_name_2", ...)
-
-install_if_missing = function(p) {
-  if (p %in% rownames(installed.packages()) == FALSE) {
-    install.packages(p)
-  }
-}
-
-invisible(sapply(my_packages, install_if_missing))
-```
-
-## run.sh
-shiny프레임워크상에서 어플리케이션을 실행하는 스크립트로, 대부부분 변경없이 아래내용 그대로 사용가능합니다.
-
-```
-#!/bin/bash
-. /.profile.d/r_environment.sh
-mkdir -p ./src/contrib/PACKAGES
-export FONTCONFIG_PATH=/etc/fonts
-R -e "shiny::runApp('/', port=8080, host='0.0.0.0')"
-```
