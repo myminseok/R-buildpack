@@ -43,6 +43,10 @@ https://github.com/rstudio/shiny-examples
   git submodule update --init
   
   BUNDLE_GEMFILE=cf.Gemfile bundle
+    
+  bundle install --path vendor/bundle
+  
+  
   ```
 
 1. Build the buildpack
