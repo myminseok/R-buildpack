@@ -103,8 +103,7 @@ dependencies:
 # for utility
 - name: realpath
   version: 1.19
-  #uri: http://kr.archive.ubuntu.com/ubuntu/pool/main/r/realpath/realpath_1.19_amd64.deb
-  uri: file:///Users/kimm5/_dev/R-buildpack/apt-archives/etc/realpath_1.19_amd64.deb
+  uri: http://kr.archive.ubuntu.com/ubuntu/pool/main/r/realpath/realpath_1.19_amd64.deb
   md5: fd8955f8c2b111ee262fea46ee1be8c9
   cf_stacks:
   - cflinuxfs2
@@ -115,8 +114,7 @@ dependencies:
 ## shiny: Pango-WARNING **: failed to choose a font, expect ugly output. engine-type='PangoRenderFc', script='latin'
 - name: fonts-dejavu-core
   version: 2.34
-#  uri: http://kr.archive.ubuntu.com/ubuntu/pool/main/f/fonts-dejavu/fonts-dejavu-core_2.34-1ubuntu1_all.deb
-  uri: https://github.com/myminseok/R-buildpack/raw/master/apt-archives/fonts-dejavu-core_2.34-1ubuntu1_all.deb
+  uri: http://kr.archive.ubuntu.com/ubuntu/pool/main/f/fonts-dejavu/fonts-dejavu-core_2.34-1ubuntu1_all.deb
   md5: 7167c133d8ec713c90fc64faab927994
   cf_stacks:
   - cflinuxfs2
